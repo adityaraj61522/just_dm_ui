@@ -6,16 +6,33 @@ import 'package:just_dm_ui/landingPage/landingPageController.dart';
 class LandingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final LandingPageController controller = Get.put(LandingPageController());
+
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          if (constraints.maxWidth > 950) {
-            return LinketScreen(constraints: constraints);
-          } else {
-            return buildMobileContent();
-          }
-        },
-      ),
+      body: Obx(() {
+        if (controller.apiResponse.value == "LOADING") {
+          // Show loader while loading
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (controller.apiResponse.value == 'PASS') {
+          // Show main content if API response is success
+          return LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              if (constraints.maxWidth > 950) {
+                return LinketScreen(constraints: constraints);
+              } else {
+                return buildMobileContent();
+              }
+            },
+          );
+        } else {
+          // Show error message or empty state if API response is not success
+          return const Center(
+            child: Text('Something went wrong. Please try again.'),
+          );
+        }
+      }),
     );
   }
 
