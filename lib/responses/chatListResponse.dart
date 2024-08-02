@@ -28,6 +28,7 @@ class ChatListUserData {
   final String chatText;
   final String chatImg;
   final String chatDate;
+  final int unreadCount;
 
   ChatListUserData({
     required this.roomId,
@@ -36,16 +37,18 @@ class ChatListUserData {
     required this.chatText,
     required this.chatImg,
     required this.chatDate,
+    required this.unreadCount,
   });
 
   factory ChatListUserData.fromJson(Map<String, dynamic> json) {
     return ChatListUserData(
-      roomId: json['roomId'],
-      userId: json['userId'],
-      name: json['name'],
-      chatText: json['chatText'],
-      chatImg: json['chatImg'],
-      chatDate: json['chatDate'],
+      roomId: json['roomId'] ?? 0,
+      userId: json['userId'] ?? 0,
+      name: json['name'] ?? '',
+      chatText: json['chatText'] ?? '',
+      chatImg: json['chatImg'] ?? '',
+      chatDate: json['chatDate'] ?? '',
+      unreadCount: json['unreadCount'] ?? 1,
     );
   }
 }

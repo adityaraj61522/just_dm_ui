@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_dm_ui/chatPage/chatPageController.dart';
 import 'package:just_dm_ui/common_widgets/commonWidgets.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:just_dm_ui/responses/chatListResponse.dart';
+import 'package:just_dm_ui/responses/chatResponse.dart';
 
 class ChatPage extends StatelessWidget {
   final controller = Get.put(ChatPageController());
@@ -70,43 +71,11 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController textController = TextEditingController();
-  late IO.Socket socket;
-  List<Map<String, dynamic>> messages = [];
-
-  @override
-  void initState() {
-    super.initState();
-    connectToServer();
-  }
-
-  void connectToServer() {
-    socket = IO.io('http://localhost:7000',
-        IO.OptionBuilder().setTransports(['websocket']).build());
-    socket.on('connect', (_) {
-      print('connected to server');
-    });
-
-    socket.on('receiveMessage', (data) {
-      setState(() {
-        messages.add(data);
-      });
-    });
-
-    socket.on('disconnect', (_) {
-      print('disconnected from server');
-    });
-  }
-
-  void sendMessage(String text) {
-    print("sending messages");
-    final message = {'sender': 'user1', 'receiver': 'user2', 'text': text};
-    socket.emit('sendMessage', message);
-    setState(() {
-      messages.add(message);
-    });
-    textController.clear();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   connectToServer();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -120,14 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: widget.controller.chatList.map((chatUser) {
                 return Column(
                   children: [
-                    _buildChatUserTile(
-                        roomId: chatUser.roomId,
-                        name: chatUser.name,
-                        lastMessage: chatUser.chatText,
-                        timestamp: chatUser.chatDate,
-                        unreadCount: 1
-                        // chatUser.unreadCount,
-                        ),
+                    _buildChatUserTile(chatUser: chatUser),
                     const Divider(),
                   ],
                 );
@@ -158,61 +120,51 @@ class _ChatScreenState extends State<ChatScreen> {
     return Column(
       children: <Widget>[
         Expanded(
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return Container(
-                color: Colors.white,
-                padding: EdgeInsets.all(20),
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    final message = widget.controller.chatMessageList[index];
-                    return ChatMessage(
-                        constraints: constraints,
-                        text: message.chatText,
-                        timestamp: message.chatDate,
-                        isUser: message.sent // Placeholder for timestamp
-                        );
-                  },
-                  itemCount: widget.controller.chatMessageList.length,
-                ),
-              );
-            },
-          ),
+          child: Obx(() {
+            // Access the observable list directly
+            final messages = widget.controller.chatMessageList;
+
+            return Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(20),
+              child: ListView.builder(
+                itemCount: messages.length, // Use length of observable list
+                itemBuilder: (context, index) {
+                  return ChatMessageTile(chat: messages[index]);
+                },
+              ),
+            );
+          }),
         ),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           color: Colors.white,
           child: ChatInputField(
-            onSubmitted: (text) => sendMessage(text),
-            controller: textController,
+            onSubmitted: (text) => widget.controller.sendMessage(),
+            controller: widget.controller.textController,
           ),
         ),
         Container(
           height: 10,
           color: Colors.white,
-        )
+        ),
       ],
     );
   }
 
-  Widget _buildChatUserTile(
-      {required int roomId,
-      required String name,
-      required String lastMessage,
-      required String timestamp,
-      required int unreadCount}) {
+  Widget _buildChatUserTile({required ChatListUserData chatUser}) {
     return ListTile(
-      onTap: () => widget.controller.fetchChatByRoom(roomId),
-      leading: CircleAvatar(child: Text(name[0])),
+      onTap: () => widget.controller.onChatTileClicked(chatUser: chatUser),
+      leading: CircleAvatar(child: Text(chatUser.name[0])),
       tileColor: Colors.white,
       hoverColor: Colors.white,
-      title: Text(name),
-      subtitle: Text(lastMessage),
+      title: Text(chatUser.name),
+      subtitle: Text(chatUser.chatText),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          if (unreadCount > 0)
+          if (chatUser.unreadCount > 0)
             Container(
               margin: const EdgeInsets.only(top: 5.0),
               padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 6),
@@ -223,12 +175,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                unreadCount.toString(),
+                chatUser.unreadCount.toString(),
                 style: const TextStyle(color: Colors.white, fontSize: 10.0),
               ),
             ),
           5.verticalSpace,
-          Text(timestamp),
+          Text(chatUser.chatDate),
         ],
       ),
     );
@@ -276,15 +228,10 @@ class ChatInputField extends StatelessWidget {
   }
 }
 
-Widget ChatMessage({
-  required BoxConstraints constraints,
-  required String text,
-  required String timestamp,
-  required bool isUser,
-}) {
+Widget ChatMessageTile({required ChatMessage chat}) {
   return Row(
     children: [
-      if (isUser) Expanded(child: SizedBox.shrink()),
+      if (chat.sent) Expanded(child: SizedBox.shrink()),
       Container(
         margin: const EdgeInsets.symmetric(vertical: 10.0),
         padding: const EdgeInsets.symmetric(
@@ -292,7 +239,8 @@ Widget ChatMessage({
           vertical: 5,
         ),
         decoration: BoxDecoration(
-          color: isUser ? const Color.fromARGB(255, 0, 102, 153) : Colors.white,
+          color:
+              chat.sent ? const Color.fromARGB(255, 0, 102, 153) : Colors.white,
           borderRadius: BorderRadius.circular(50.0),
           border: Border.all(
             color: const Color.fromARGB(255, 216, 213, 213), // Border color
@@ -304,14 +252,14 @@ Widget ChatMessage({
           children: [
             Row(
               mainAxisAlignment:
-                  isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                  chat.sent ? MainAxisAlignment.end : MainAxisAlignment.start,
               children: <Widget>[
                 Center(
                   child: Container(
                     child: Text(
-                      text,
+                      chat.chatText,
                       style: TextStyle(
-                          color: isUser ? Colors.white : Colors.blueGrey),
+                          color: chat.sent ? Colors.white : Colors.blueGrey),
                     ),
                   ),
                 ),
@@ -319,10 +267,10 @@ Widget ChatMessage({
                 Container(
                   margin: const EdgeInsets.only(top: 5.0),
                   child: Text(
-                    timestamp,
+                    chat.chatDate,
                     style: TextStyle(
                         fontSize: 10,
-                        color: isUser
+                        color: chat.sent
                             ? const Color.fromARGB(255, 219, 213, 213)
                             : const Color.fromARGB(255, 100, 100, 100)),
                   ),

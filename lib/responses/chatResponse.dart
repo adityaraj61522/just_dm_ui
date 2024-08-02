@@ -24,6 +24,7 @@ class ChatMessage {
   final int senderId;
   final int receiverId;
   final String chatText;
+  final String chatImg;
   final String chatDate;
   final bool sent;
 
@@ -31,6 +32,7 @@ class ChatMessage {
     required this.senderId,
     required this.receiverId,
     required this.chatText,
+    required this.chatImg,
     required this.chatDate,
     required this.sent,
   });
@@ -40,6 +42,7 @@ class ChatMessage {
       senderId: json['sender_id'] ?? 0,
       receiverId: json['receiver_id'] ?? 0,
       chatText: json['chatText'] ?? '',
+      chatImg: json['chatImg'] ?? '',
       chatDate: json['chatDate'] ?? '',
       sent: json['sent'] ?? false,
     );
