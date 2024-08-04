@@ -44,5 +44,5 @@ app.*.map.json
 
 
 # ignore config 
-/lib/config.dart
-/config.dart
+# /lib/config.dart
+# /config.dart
