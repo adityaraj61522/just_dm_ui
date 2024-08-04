@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:just_dm_ui/config.dart';
 import 'package:just_dm_ui/responses/loginResponse.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,7 +23,7 @@ class LandingPageController extends GetxController {
     apiResponse.value = "LOADING";
     try {
       final response =
-          await http.get(Uri.parse('http://localhost:7000/api/login'));
+          await http.get(Uri.parse(Config.apiBaseUrl + '/api/login'));
 
       if (response.statusCode == 200) {
         apiResponse.value = "PASS";
@@ -30,8 +31,8 @@ class LandingPageController extends GetxController {
           var responseData = json.decode(response.body);
           var loginResponse = LoginResponse.fromJson(responseData);
           if (loginResponse.code == 200 && loginResponse.status == "SUCCESS") {
-              print(loginResponse.location);
-              _launchURL(Uri.parse(loginResponse.location));
+            print(loginResponse.location);
+            _launchURL(Uri.parse(loginResponse.location));
           } else {
             apiResponse.value = "FAILED";
             print("Something is wrong!!!!!!!");
@@ -62,6 +63,7 @@ class LandingPageController extends GetxController {
       print('Error: $e');
     }
   }
+
   final List<Map<String, String>> educationList = [
     {
       "degree": "Bachelors of Technology",

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:just_dm_ui/responses/chatListResponse.dart';
 import 'package:just_dm_ui/responses/chatResponse.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:just_dm_ui/config.dart';
 
 class ChatPageController extends GetxController {
   final apiResponse = "LOADING".obs;
@@ -89,7 +90,7 @@ class ChatPageController extends GetxController {
         'userid': '1',
       };
       final response = await http.get(
-          Uri.parse('http://localhost:7000/api/getChatList'),
+          Uri.parse(Config.apiBaseUrl + '/api/getChatList'),
           headers: headers);
       if (response.statusCode == 200) {
         print(response.statusCode);
@@ -123,7 +124,7 @@ class ChatPageController extends GetxController {
         'userid': 1.toString()
       };
       final response = await http.get(
-          Uri.parse('http://localhost:7000/api/getChatsByUserId'),
+          Uri.parse(Config.apiBaseUrl + '/api/getChatsByUserId'),
           headers: headers);
       if (response.statusCode == 200) {
         print(response.statusCode);

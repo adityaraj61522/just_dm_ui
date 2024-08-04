@@ -1,5 +1,3 @@
-import 'dart:math';
-import 'package:just_dm_ui/common_widgets/commonWidgets.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_dm_ui/getLinkdinUser/getLinkdinUserController.dart';
@@ -8,8 +6,8 @@ class GetLinkdinUser extends StatelessWidget {
   GetLinkdinUser({
     super.key,
     required this.token,
-  }):controller = Get.put(GetLinkdinUserController(token:token));
-final String token;
+  }) : controller = Get.put(GetLinkdinUserController(token: token));
+  final String token;
   final GetLinkdinUserController controller;
 
   @override
@@ -20,9 +18,10 @@ final String token;
   Widget buildContent() {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        return SizedBox(child: Text(token),);
+        return SizedBox(
+          child: Text(token),
+        );
       },
     );
   }
-
 }
