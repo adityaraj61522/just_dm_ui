@@ -83336,7 +83336,7 @@ s=q}while(true)switch(s){case 0:h=o.ax
 h.sl(0,"LOADING")
 q=3
 j=t.N
-n=A.a7(["token","BYPASS","userid","1"],j,j)
+n=A.a7(["Content-Type","application/json","token","BYPASS","userid","1"],j,j)
 s=6
 return A.T(A.arB(A.dQ("https://api.linket.chat/api/getChatList",0,null),n),$async$y8)
 case 6:m=b
@@ -83368,7 +83368,7 @@ s=q}while(true)switch(s){case 0:h=o.ay
 h.sl(0,"LOADING")
 q=3
 j=t.N
-n=A.a7(["token","BYPASS","roomid",B.h.k(o.ch.gl(0).a),"userid",B.h.k(1)],j,j)
+n=A.a7(["Content-Type","application/json","token","BYPASS","roomid",B.h.k(o.ch.gl(0).a),"userid",B.h.k(1)],j,j)
 s=6
 return A.T(A.arB(A.dQ("https://api.linket.chat/api/getChatsByUserId",0,null),n),$async$y7)
 case 6:m=c

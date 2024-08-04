@@ -86,6 +86,7 @@ class ChatPageController extends GetxController {
     apiResponse.value = "LOADING";
     try {
       final Map<String, String> headers = {
+        'Content-Type': 'application/json',
         'token': 'BYPASS',
         'userid': '1',
       };
@@ -119,6 +120,7 @@ class ChatPageController extends GetxController {
     apiScreenResponse.value = "LOADING";
     try {
       final Map<String, String> headers = {
+        'Content-Type': 'application/json',
         'token': 'BYPASS',
         'roomid': selectedChatRoom.value.roomId.toString(),
         'userid': 1.toString()
