@@ -1,66 +1,63 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:just_dm_ui/config.dart';
-import 'package:just_dm_ui/responses/loginResponse.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:just_dm_ui/ratePage/ratePage.dart';
+import 'package:just_dm_ui/responses/userResponse.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetLinkdinUserController extends GetxController {
-  GetLinkdinUserController({
-    required this.token,
-  });
-  final String token;
   final apiResponse = "LOADING".obs;
 
-  @override
-  void onInit() async {
-    super.onInit();
-    saveToStorage("token", token);
-    print("-------------------session token is--------------------");
-    print(readFromStorage('token').toString());
+  Future<void> storeToken(String token) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('auth_token', token);
   }
 
-  Map<String, dynamic> decodeJwt(String token) {
-    // Decode the token
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    return decodedToken;
+  Future<void> storeUserDetails(String userData) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_data', userData);
   }
 
-  final storage = FlutterSecureStorage();
-
-  Future<void> saveToStorage(String key, String value) async {
-    await storage.write(key: key, value: value);
+  Future<String?> getToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('auth_token');
   }
 
-  Future<String?> readFromStorage(String key) async {
-    return await storage.read(key: key);
+  Future<void> removeToken() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('auth_token');
   }
 
-  Future<void> deleteFromStorage(String key) async {
-    await storage.delete(key: key);
-  }
-
-  void onLoginButtonClicked() async {
+  void getUserData(String token, BuildContext context) async {
     apiResponse.value = "LOADING";
     try {
-      final response =
-          await http.get(Uri.parse(Config.apiBaseUrl + '/api/login'));
+      final response = await http.get(
+        Uri.parse(Config.apiBaseUrl + '/api/getUserDetails'),
+        headers: {
+          "token": token,
+        },
+      );
 
       if (response.statusCode == 200) {
         apiResponse.value = "PASS";
         if (response.body.isNotEmpty) {
           var responseData = json.decode(response.body);
-          var loginResponse = LoginResponse.fromJson(responseData);
-          if (loginResponse.code == 200 && loginResponse.status == "SUCCESS") {
-            print(loginResponse.location);
-            _launchURL(Uri.parse(loginResponse.location));
+          var userResponse = UserResponse.fromJson(responseData);
+          if (userResponse.code == 200 && userResponse.status == "SUCCESS") {
+            await storeUserDetails(userResponse.userData.toString());
+            if (userResponse.isNew) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => RatePage()),
+              );
+            }
           } else {
             apiResponse.value = "FAILED";
             print("Something is wrong!!!!!!!");
-            print(loginResponse);
+            print(userResponse);
           }
         } else {
           apiResponse.value = "FAILED";
@@ -73,18 +70,6 @@ class GetLinkdinUserController extends GetxController {
     } catch (error) {
       apiResponse.value = "FAILED";
       print("Error: $error");
-    }
-  }
-
-  void _launchURL(Uri url) async {
-    try {
-      if (await canLaunchUrl(url)) {
-        await launchUrl(url);
-      } else {
-        throw 'Could not launch $url';
-      }
-    } catch (e) {
-      print('Error: $e');
     }
   }
 }

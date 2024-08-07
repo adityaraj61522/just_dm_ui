@@ -1,6 +1,7 @@
 import 'package:just_dm_ui/chatPage/chatPage.dart';
 import 'package:just_dm_ui/getLinkdinUser/getLinkdinUser.dart';
 import 'package:just_dm_ui/landingPage/landingPage.dart';
+import 'package:just_dm_ui/ratePage/ratePage.dart';
 import 'package:just_dm_ui/routes/routesUtils.dart';
 import 'package:flutter/material.dart';
 
@@ -20,14 +21,17 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/chat",  
+      initialRoute: "/landing",
       routes: {
         AppRoutes.landingRoute: (context) => LandingPage(),
-        AppRoutes.getLinkdinUserRoute: (context) => GetLinkdinUser(token:""),
+        AppRoutes.getLinkdinUserRoute: (context) => GetLinkdinUser(token: ""),
+        AppRoutes.ratePageRoute: (context) => RatePage(),
         AppRoutes.chatRoute: (context) => ChatPage(),
-      },onGenerateRoute: (settings) {
+      },
+      onGenerateRoute: (settings) {
         final uri = Uri.parse(settings.name!);
-        if (uri.pathSegments.length == 2 && uri.pathSegments.first == 'getLinkdinUser') {
+        if (uri.pathSegments.length == 2 &&
+            uri.pathSegments.first == 'getLinkdinUser') {
           final token = uri.pathSegments[1];
           return MaterialPageRoute(
             builder: (context) => GetLinkdinUser(token: token),

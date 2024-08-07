@@ -11,7 +11,7 @@ class LandingPageController extends GetxController {
 
   final List<String> technologyNameList = [];
   final List<String> technologyLinkList = [];
-  final apiResponse = "LOADING".obs;
+  final apiResponse = "PASS".obs;
   // LoginResponseData loginRes = {} as LoginResponseData;
   @override
   void onInit() {
