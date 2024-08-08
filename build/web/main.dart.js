@@ -83463,7 +83463,7 @@ q=3
 j=t.N
 n=A.a6(["Content-Type","application/json","token","BYPASS","userid","1"],j,j)
 s=6
-return A.V(A.XB(A.dq("http://localhost:7000/api/getChatList",0,null),n),$async$ye)
+return A.V(A.XB(A.dq("https://api.linket.chat/api/getChatList",0,null),n),$async$ye)
 case 6:m=b
 if(m.b===200){A.cJ(m.b)
 h.sl(0,"PASS")
@@ -83495,7 +83495,7 @@ q=3
 j=t.N
 n=A.a6(["Content-Type","application/json","token","BYPASS","roomid",B.h.k(o.ch.gl(0).a),"userid",B.h.k(1)],j,j)
 s=6
-return A.V(A.XB(A.dq("http://localhost:7000/api/getChatsByUserId",0,null),n),$async$yd)
+return A.V(A.XB(A.dq("https://api.linket.chat/api/getChatsByUserId",0,null),n),$async$yd)
 case 6:m=c
 if(m.b===200){A.cJ(m.b)
 h.sl(0,"PASS")
@@ -83567,7 +83567,7 @@ a6.sl(0,"LOADING")
 q=3
 j=t.N
 s=6
-return A.V(A.XB(A.dq("http://localhost:7000/api/getUserDetails",0,null),A.a6(["token",a8],j,j)),$async$qr)
+return A.V(A.XB(A.dq("https://api.linket.chat/api/getUserDetails",0,null),A.a6(["token",a8],j,j)),$async$qr)
 case 6:n=b1
 s=n.b===200?7:9
 break
@@ -83673,7 +83673,7 @@ s=q}while(true)switch(s){case 0:h=o.CW
 h.sl(0,"LOADING")
 q=3
 s=6
-return A.V(A.XB(A.dq("http://localhost:7000/api/login",0,null),null),$async$zi)
+return A.V(A.XB(A.dq("https://api.linket.chat/api/login",0,null),null),$async$zi)
 case 6:n=b
 if(n.b===200){h.sl(0,"PASS")
 j=n
@@ -83787,7 +83787,7 @@ h.sl(0,"LOADING")
 q=3
 j=t.N
 s=6
-return A.V(A.XB(A.dq("http://localhost:7000/api/setRate",0,null),A.a6(["token","BYPASS","rate","500","userid","1"],j,j)),$async$zt)
+return A.V(A.XB(A.dq("https://api.linket.chat/api/setRate",0,null),A.a6(["token","BYPASS","rate","500","userid","1"],j,j)),$async$zt)
 case 6:n=c
 if(n.b===200){h.sl(0,"PASS")
 j=n
