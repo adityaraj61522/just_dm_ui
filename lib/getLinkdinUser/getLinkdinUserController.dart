@@ -7,28 +7,16 @@ import 'package:just_dm_ui/config.dart';
 import 'package:just_dm_ui/ratePage/ratePage.dart';
 import 'package:just_dm_ui/responses/userResponse.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:html' as html;
 
 class GetLinkdinUserController extends GetxController {
   final apiResponse = "LOADING".obs;
-
-  Future<void> storeToken(String token) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token);
+  saveToLocalStorage(String key, String value) {
+    html.window.localStorage[key] = value;
   }
 
-  Future<void> storeUserDetails(String userData) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_data', userData);
-  }
-
-  Future<String?> getToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('auth_token');
-  }
-
-  Future<void> removeToken() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('auth_token');
+  String? getFromLocalStorage(String key) {
+    return html.window.localStorage[key];
   }
 
   void getUserData(String token, BuildContext context) async {
@@ -47,7 +35,21 @@ class GetLinkdinUserController extends GetxController {
           var responseData = json.decode(response.body);
           var userResponse = UserResponse.fromJson(responseData);
           if (userResponse.code == 200 && userResponse.status == "SUCCESS") {
-            await storeUserDetails(userResponse.userData.toString());
+            await saveToLocalStorage(
+                'user_data',
+                {
+                  'email': userResponse.userData.email,
+                  'emailVerified': userResponse.userData.emailVerified,
+                  'familyName': userResponse.userData.familyName,
+                  'locale': {
+                    'country': userResponse.userData.locale.country,
+                    'language': userResponse.userData.locale.language,
+                  },
+                  'givenName': userResponse.userData.givenName,
+                  'name': userResponse.userData.name,
+                  'picture': userResponse.userData.picture,
+                  'sub': userResponse.userData.sub
+                }.toString());
             if (userResponse.isNew) {
               Navigator.push(
                 context,

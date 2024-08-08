@@ -43,7 +43,7 @@ class _TokenHandlerState extends State<TokenHandler> {
     super.initState();
     print(widget.token);
     if (widget.token.isNotEmpty) {
-      widget.controller.storeToken(widget.token);
+      widget.controller.saveToLocalStorage('auth_token', widget.token);
       widget.controller.getUserData(widget.token, context);
     }
   }

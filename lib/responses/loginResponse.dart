@@ -13,7 +13,7 @@ class LoginResponse {
     return LoginResponse(
       code: json['code'],
       status: json['status'],
-      location: json['location'],
+      location: json['location'] ?? '',
     );
   }
 }

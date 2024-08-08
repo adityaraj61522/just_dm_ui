@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:just_dm_ui/common_widgets/commonWidgets.dart';
+import 'package:just_dm_ui/ratePage/ratePageController.dart';
 
 class RatePage extends StatelessWidget {
+  final RatePageController controller = Get.put(RatePageController());
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,7 +15,7 @@ class RatePage extends StatelessWidget {
       home: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           if (constraints.maxWidth > 950) {
-            return buildScreen(constraints: constraints);
+            return buildScreen(context, constraints: constraints);
           } else {
             return Container(
               child: buildMobileContent(),
@@ -27,7 +30,8 @@ class RatePage extends StatelessWidget {
     return Container();
   }
 
-  Widget buildScreen({required BoxConstraints constraints}) {
+  Widget buildScreen(BuildContext context,
+      {required BoxConstraints constraints}) {
     return Scaffold(
       body: Container(
         width: constraints.maxWidth,
@@ -43,7 +47,7 @@ class RatePage extends StatelessWidget {
             20.verticalSpace,
             buildInputBar(constraints.maxWidth / 3),
             20.verticalSpace,
-            buildSubmit(constraints.maxWidth / 3),
+            buildSubmit(context, constraints.maxWidth / 3),
             const Expanded(
               child: SizedBox.shrink(),
             ),
@@ -98,11 +102,11 @@ class RatePage extends StatelessWidget {
     );
   }
 
-  Widget buildSubmit(width) {
+  Widget buildSubmit(BuildContext context, width) {
     return SizedBox(
       width: width,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () => controller.onSetRateButtonClicked(context),
         style: ElevatedButton.styleFrom(
           padding: const EdgeInsets.symmetric(vertical: 15),
           backgroundColor: const Color.fromARGB(255, 0, 102, 153),
