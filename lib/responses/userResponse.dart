@@ -13,65 +13,57 @@ class UserResponse {
     required this.isNew,
   });
 
-  factory UserResponse.fromJson(Map<String, dynamic> json) {
+  factory UserResponse.fromMap(Map<String, dynamic> map) {
     return UserResponse(
-      code: json['code'],
-      status: json['status'],
-      userData: UserData.fromJson(json['userData']),
-      message: json['message'],
-      isNew: json['isNew'],
+      code: map['code'] ?? 201,
+      status: map['status'],
+      userData: UserData.fromMap(map['userData']),
+      message: map['message'],
+      isNew: map['isNew'],
     );
   }
 }
 
 class UserData {
+  final String id;
   final String sub;
   final bool emailVerified;
   final String name;
-  final Locale locale;
+  final String localeCountry;
+  final String localeLanguage;
   final String givenName;
   final String familyName;
   final String email;
   final String picture;
+  final int rate;
 
   UserData({
+    required this.id,
     required this.sub,
     required this.emailVerified,
     required this.name,
-    required this.locale,
+    required this.localeCountry,
+    required this.localeLanguage,
     required this.givenName,
     required this.familyName,
     required this.email,
     required this.picture,
+    required this.rate,
   });
 
-  factory UserData.fromJson(Map<String, dynamic> json) {
+  factory UserData.fromMap(Map<String, dynamic> map) {
     return UserData(
-      sub: json['sub'],
-      emailVerified: json['email_verified'],
-      name: json['name'],
-      locale: Locale.fromJson(json['locale']),
-      givenName: json['given_name'],
-      familyName: json['family_name'],
-      email: json['email'],
-      picture: json['picture'],
-    );
-  }
-}
-
-class Locale {
-  final String country;
-  final String language;
-
-  Locale({
-    required this.country,
-    required this.language,
-  });
-
-  factory Locale.fromJson(Map<String, dynamic> json) {
-    return Locale(
-      country: json['country'],
-      language: json['language'],
+      id: map['id'] ?? '',
+      sub: map['profile_sub'] ?? '',
+      emailVerified: map['email_verified'] == 1 ? true : false,
+      name: map['name'] ?? '',
+      localeCountry: map['locale_country'] ?? '',
+      localeLanguage: map['locale_language'] ?? '',
+      givenName: map['given_name'] ?? '',
+      familyName: map['family_name'] ?? '',
+      email: map['email'] ?? '',
+      picture: map['picture'] ?? '',
+      rate: map['rate'] ?? 0,
     );
   }
 }

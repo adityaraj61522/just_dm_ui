@@ -9,7 +9,7 @@ class LoginResponse {
     required this.location,
   });
 
-  factory LoginResponse.fromJson(Map<String, dynamic> json) {
+  factory LoginResponse.fromMap(Map<String, dynamic> json) {
     return LoginResponse(
       code: json['code'],
       status: json['status'],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_dm_ui/getLinkdinUser/getLinkdinUserController.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GetLinkdinUser extends StatelessWidget {
   final String token;

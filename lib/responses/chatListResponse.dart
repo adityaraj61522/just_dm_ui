@@ -9,21 +9,20 @@ class ChatListResponse {
     required this.data,
   });
 
-  factory ChatListResponse.fromJson(Map<String, dynamic> json) {
+  factory ChatListResponse.fromMap(Map<String, dynamic> json) {
     return ChatListResponse(
       code: json['code'],
       status: json['status'],
       data: (json['data'] as List<dynamic>)
-          .map(
-              (item) => ChatListUserData.fromJson(item as Map<String, dynamic>))
+          .map((item) => ChatListUserData.fromMap(item as Map<String, dynamic>))
           .toList(),
     );
   }
 }
 
 class ChatListUserData {
-  final int roomId;
-  final int userId;
+  final String roomId;
+  final String userId;
   final String name;
   final String chatText;
   final String chatImg;
@@ -40,7 +39,7 @@ class ChatListUserData {
     required this.unreadCount,
   });
 
-  factory ChatListUserData.fromJson(Map<String, dynamic> json) {
+  factory ChatListUserData.fromMap(Map<String, dynamic> json) {
     return ChatListUserData(
       roomId: json['roomId'] ?? 0,
       userId: json['userId'] ?? 0,

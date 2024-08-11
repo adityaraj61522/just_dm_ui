@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:just_dm_ui/chatPage/chatPage.dart';
 import 'package:just_dm_ui/config.dart';
 import 'package:just_dm_ui/responses/loginResponse.dart';
+import 'dart:html' as html;
 
 class RatePageController extends GetxController {
   final String linketLogo = "https://imgur.com/a/tkIVVeF";
@@ -13,26 +14,31 @@ class RatePageController extends GetxController {
   final List<String> technologyNameList = [];
   final List<String> technologyLinkList = [];
   final apiResponse = "PASS".obs;
+  final token = ''.obs;
   @override
   void onInit() {
     super.onInit();
+    token.value = getFromLocalStorage('auth_token') ?? 'NO_TOKEN';
+  }
+
+  String? getFromLocalStorage(String key) {
+    return html.window.localStorage[key];
   }
 
   void onSetRateButtonClicked(BuildContext context) async {
     apiResponse.value = "LOADING";
     try {
       final response = await http
-          .get(Uri.parse(Config.apiBaseUrl + '/api/setRate'), headers: {
-        'token': 'BYPASS',
+          .get(Uri.parse('${Config.apiBaseUrl}/api/setRate'), headers: {
+        'token': token.value,
         'rate': '500',
-        'userid': '1',
       });
 
       if (response.statusCode == 200) {
         apiResponse.value = "PASS";
         if (response.body.isNotEmpty) {
           var responseData = json.decode(response.body);
-          var loginResponse = LoginResponse.fromJson(responseData);
+          var loginResponse = LoginResponse.fromMap(responseData);
           if (loginResponse.code == 200 && loginResponse.status == "SUCCESS") {
             Navigator.push(
               context,
@@ -40,20 +46,15 @@ class RatePageController extends GetxController {
             );
           } else {
             apiResponse.value = "FAILED";
-            print("Something is wrong!!!!!!!");
-            print(loginResponse);
           }
         } else {
           apiResponse.value = "FAILED";
-          print("response is blank");
         }
       } else {
         apiResponse.value = "FAILED";
-        print("Request failed with status: ${response.statusCode}");
       }
     } catch (error) {
       apiResponse.value = "FAILED";
-      print("Error: $error");
     }
   }
 }

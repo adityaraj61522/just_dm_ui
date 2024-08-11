@@ -9,20 +9,20 @@ class ChatResponse {
     required this.data,
   });
 
-  factory ChatResponse.fromJson(Map<String, dynamic> json) {
+  factory ChatResponse.fromMap(Map<String, dynamic> json) {
     return ChatResponse(
       code: json['code'],
       status: json['status'],
       data: (json['data'] as List<dynamic>)
-          .map((item) => ChatMessage.fromJson(item as Map<String, dynamic>))
+          .map((item) => ChatMessage.fromMap(item as Map<String, dynamic>))
           .toList(),
     );
   }
 }
 
 class ChatMessage {
-  final int senderId;
-  final int receiverId;
+  final String senderId;
+  final String receiverId;
   final String chatText;
   final String chatImg;
   final String chatDate;
@@ -37,7 +37,7 @@ class ChatMessage {
     required this.sent,
   });
 
-  factory ChatMessage.fromJson(Map<String, dynamic> json) {
+  factory ChatMessage.fromMap(Map<String, dynamic> json) {
     return ChatMessage(
       senderId: json['sender_id'] ?? 0,
       receiverId: json['receiver_id'] ?? 0,

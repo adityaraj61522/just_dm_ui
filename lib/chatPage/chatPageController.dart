@@ -4,25 +4,34 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:just_dm_ui/responses/chatListResponse.dart';
 import 'package:just_dm_ui/responses/chatResponse.dart';
+import 'package:just_dm_ui/responses/userResponse.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:just_dm_ui/config.dart';
+import 'dart:html' as html;
 
 class ChatPageController extends GetxController {
   final apiResponse = "LOADING".obs;
   final apiScreenResponse = "".obs;
-  final selectedChatRoom = ChatListUserData.fromJson({}).obs;
+  final selectedChatRoom = ChatListUserData.fromMap({}).obs;
 
   final TextEditingController textController = TextEditingController();
   final imageUploadUrl = ''.obs;
 
-  final loggedInUserId = 1;
+  final token = ''.obs;
+  final userData = UserData.fromMap({}).obs;
 
   var chatList = <ChatListUserData>[].obs;
   var chatMessageList = <ChatMessage>[].obs;
   @override
   void onInit() async {
     super.onInit();
+    token.value = getFromLocalStorage('auth_token') ?? 'NO_TOKEN';
+    userData.value = json.decode(getFromLocalStorage('user')!);
     await fetchChatList();
+  }
+
+  String? getFromLocalStorage(String key) {
+    return html.window.localStorage[key];
   }
 
   void onChatTileClicked({required ChatListUserData chatUser}) async {
@@ -44,8 +53,9 @@ class ChatPageController extends GetxController {
     socket.on('connect', (_) {
       print('Connected to server');
       socket.emit('joinRoom', {
+        'token': token.value,
         'roomId': selectedChatRoom.value.roomId,
-        'senderId': 1,
+        'senderId': userData.value.id,
         'receiverId': selectedChatRoom.value.userId,
       });
     });
@@ -63,14 +73,14 @@ class ChatPageController extends GetxController {
   void sendMessage() {
     final message = {
       'roomId': selectedChatRoom.value.roomId,
-      'senderId': loggedInUserId,
+      'senderId': userData.value.id,
       'receiverId': selectedChatRoom.value.userId,
       'chatText': textController.text,
       'chatImg': imageUploadUrl.value,
     };
     socket.emit('sendMessage', message);
     final chatMessage = ChatMessage(
-      senderId: loggedInUserId,
+      senderId: userData.value.id,
       receiverId: selectedChatRoom.value.userId,
       chatText: textController.text,
       chatImg: imageUploadUrl.value,
@@ -87,18 +97,17 @@ class ChatPageController extends GetxController {
     try {
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
-        'token': 'BYPASS',
-        'userid': '1',
+        'token': token.value,
       };
       final response = await http.get(
-          Uri.parse(Config.apiBaseUrl + '/api/getChatList'),
+          Uri.parse('${Config.apiBaseUrl}/api/getChatList'),
           headers: headers);
       if (response.statusCode == 200) {
         print(response.statusCode);
         apiResponse.value = "PASS";
         if (response.body.isNotEmpty) {
           var responseData = json.decode(response.body);
-          var chatListResponse = ChatListResponse.fromJson(responseData);
+          var chatListResponse = ChatListResponse.fromMap(responseData);
           if (chatListResponse.code == 200 &&
               chatListResponse.status == "SUCCESS") {
             chatList.value = chatListResponse.data;
@@ -116,24 +125,23 @@ class ChatPageController extends GetxController {
     }
   }
 
-  fetchChatByRoom({required int roomId}) async {
+  fetchChatByRoom({required String roomId}) async {
     apiScreenResponse.value = "LOADING";
     try {
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
-        'token': 'BYPASS',
-        'roomid': selectedChatRoom.value.roomId.toString(),
-        'userid': 1.toString()
+        'token': token.value,
+        'roomid': selectedChatRoom.value.roomId.toString()
       };
       final response = await http.get(
-          Uri.parse(Config.apiBaseUrl + '/api/getChatsByUserId'),
+          Uri.parse('${Config.apiBaseUrl}/api/getChatsByRoomId'),
           headers: headers);
       if (response.statusCode == 200) {
         print(response.statusCode);
         apiScreenResponse.value = "PASS";
         if (response.body.isNotEmpty) {
           var responseData = json.decode(response.body);
-          var chatListResponse = ChatResponse.fromJson(responseData);
+          var chatListResponse = ChatResponse.fromMap(responseData);
           if (chatListResponse.code == 200 &&
               chatListResponse.status == "SUCCESS") {
             chatMessageList.value = chatListResponse.data;
