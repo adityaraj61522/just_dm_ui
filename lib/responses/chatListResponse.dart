@@ -41,8 +41,8 @@ class ChatListUserData {
 
   factory ChatListUserData.fromMap(Map<String, dynamic> json) {
     return ChatListUserData(
-      roomId: json['roomId'] ?? 0,
-      userId: json['userId'] ?? 0,
+      roomId: json['roomId'] ?? '',
+      userId: json['userId'] ?? '',
       name: json['name'] ?? '',
       chatText: json['chatText'] ?? '',
       chatImg: json['chatImg'] ?? '',

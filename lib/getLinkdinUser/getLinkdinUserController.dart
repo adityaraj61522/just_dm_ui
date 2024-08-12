@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:just_dm_ui/chatPage/chatPage.dart';
 import 'package:just_dm_ui/config.dart';
 import 'package:just_dm_ui/ratePage/ratePage.dart';
 import 'package:just_dm_ui/responses/userResponse.dart';
@@ -35,32 +34,14 @@ class GetLinkdinUserController extends GetxController {
           var responseData = json.decode(response.body);
           var userResponse = UserResponse.fromMap(responseData);
           if (userResponse.code == 200 && userResponse.status == "SUCCESS") {
-            await saveToLocalStorage(
-                'user_data',
-                {
-                  'id': userResponse.userData.id,
-                  'email': userResponse.userData.email,
-                  'emailVerified':
-                      userResponse.userData.emailVerified.toString(),
-                  'familyName': userResponse.userData.familyName,
-                  'localeCountry': userResponse.userData.localeCountry,
-                  'localeLanguage': userResponse.userData.localeLanguage,
-                  'givenName': userResponse.userData.givenName,
-                  'name': userResponse.userData.name,
-                  'picture': userResponse.userData.picture,
-                  'sub': userResponse.userData.sub,
-                  'rate': userResponse.userData.rate.toString(),
-                }.toString());
+            await saveToLocalStorage('user_data', response.body);
             if (userResponse.isNew) {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => RatePage()),
               );
             } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChatPage()),
-              );
+              Navigator.pushNamed(context, '/chat');
             }
           } else {
             apiResponse.value = "FAILED";

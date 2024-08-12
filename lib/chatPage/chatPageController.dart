@@ -26,7 +26,9 @@ class ChatPageController extends GetxController {
   void onInit() async {
     super.onInit();
     token.value = getFromLocalStorage('auth_token') ?? 'NO_TOKEN';
-    userData.value = json.decode(getFromLocalStorage('user')!);
+    final userdata = getFromLocalStorage('user_data')!;
+    final user = json.decode(userdata);
+    userData.value = UserResponse.fromMap(user).userData;
     await fetchChatList();
   }
 
