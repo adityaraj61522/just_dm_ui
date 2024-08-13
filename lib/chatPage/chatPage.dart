@@ -12,7 +12,7 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Chat UI',
+      title: 'Linket',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -47,7 +47,7 @@ class ChatPage extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         if (constraints.maxWidth > 950) {
-          return ChatScreen(controller: controller);
+          return ChatScreen(constraints: constraints);
         } else {
           return Container(
             child: buildMobileContent(),
@@ -60,52 +60,70 @@ class ChatPage extends StatelessWidget {
   Widget buildMobileContent() {
     return Container();
   }
-}
 
-class ChatScreen extends StatefulWidget {
-  final ChatPageController controller;
-  const ChatScreen({super.key, required this.controller});
-
-  @override
-  _ChatScreenState createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   connectToServer();
-  // }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget ChatScreen({required BoxConstraints constraints}) {
     return Row(
       children: [
         Expanded(
           flex: 1,
-          child: Container(
-            color: Colors.white,
-            child: ListView(
-              children: widget.controller.chatList.map((chatUser) {
-                return Column(
+          child: Column(
+            children: [
+              Obx(
+                () {
+                  if (controller.selectedLeftPage.value == "CHAT") {
+                    return buildChatList(boxHeight: constraints.maxHeight - 50);
+                  }
+                  if (controller.selectedLeftPage.value == "WALLET") {
+                    return buildWalletPage(
+                        boxHeight: constraints.maxHeight - 50);
+                  }
+                  if (controller.selectedLeftPage.value == "PROFILE") {
+                    return buildProfilePage(
+                        boxHeight: constraints.maxHeight - 50);
+                  }
+                  return (SizedBox.shrink());
+                },
+              ),
+              Container(
+                height: 50,
+                color: Colors.white,
+                child: Row(
                   children: [
-                    _buildChatUserTile(chatUser: chatUser),
-                    const Divider(),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => controller.onLeftPageChange(page: "CHAT"),
+                        child: Center(child: Text("Chat")),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () =>
+                            controller.onLeftPageChange(page: "WALLET"),
+                        child: Center(child: Text("Wallet")),
+                      ),
+                    ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () =>
+                            controller.onLeftPageChange(page: "PROFILE"),
+                        child: Center(child: Text("Profile")),
+                      ),
+                    ),
                   ],
-                );
-              }).toList(),
-            ),
+                ),
+              )
+            ],
           ),
         ),
         const VerticalDivider(width: 1),
         Expanded(
           flex: 3,
           child: Obx(() {
-            if (widget.controller.apiScreenResponse == "LOADING") {
+            if (controller.apiScreenResponse.value == "LOADING") {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (widget.controller.apiScreenResponse == "PASS") {
+            } else if (controller.apiScreenResponse.value == "PASS") {
               return buildChatScreen();
             } else {
               return const SizedBox.shrink();
@@ -116,13 +134,48 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  Widget buildChatList({required boxHeight}) {
+    return Container(
+      height: boxHeight,
+      color: Colors.white,
+      child: ListView(
+        children: controller.chatList.map((chatUser) {
+          return Column(
+            children: [
+              _buildChatUserTile(chatUser: chatUser),
+              const Divider(),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget buildWalletPage({required boxHeight}) {
+    return Container(
+      height: boxHeight,
+      color: Colors.white,
+      child: Row(
+        children: [Text("Your Current Balance : ₹")],
+      ),
+    );
+  }
+
+  Widget buildProfilePage({required boxHeight}) {
+    return Container(
+      height: boxHeight,
+      color: Colors.white,
+      child: Text("PROFILE"),
+    );
+  }
+
   Widget buildChatScreen() {
     return Column(
       children: <Widget>[
         Expanded(
           child: Obx(() {
             // Access the observable list directly
-            final messages = widget.controller.chatMessageList;
+            final messages = controller.chatMessageList;
 
             return Container(
               color: Colors.white,
@@ -140,8 +193,8 @@ class _ChatScreenState extends State<ChatScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           color: Colors.white,
           child: ChatInputField(
-            onSubmitted: (text) => widget.controller.sendMessage(),
-            controller: widget.controller.textController,
+            onSubmitted: (text) => controller.sendMessage(),
+            controller: controller.textController,
           ),
         ),
         Container(
@@ -154,7 +207,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildChatUserTile({required ChatListUserData chatUser}) {
     return ListTile(
-      onTap: () => widget.controller.onChatTileClicked(chatUser: chatUser),
+      onTap: () => controller.onChatTileClicked(chatUser: chatUser),
       leading: CircleAvatar(child: Text(chatUser.name[0])),
       tileColor: Colors.white,
       hoverColor: Colors.white,
@@ -208,7 +261,7 @@ class ChatInputField extends StatelessWidget {
       child: Row(
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.photo_camera),
+            icon: Icon(Icons.attach_file),
             onPressed: () {},
           ),
           Expanded(

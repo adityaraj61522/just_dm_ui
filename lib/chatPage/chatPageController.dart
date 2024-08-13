@@ -20,6 +20,8 @@ class ChatPageController extends GetxController {
   final token = ''.obs;
   final userData = UserData.fromMap({}).obs;
 
+  final selectedLeftPage = "CHAT".obs;
+
   var chatList = <ChatListUserData>[].obs;
   var chatMessageList = <ChatMessage>[].obs;
   @override
@@ -133,7 +135,7 @@ class ChatPageController extends GetxController {
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
         'token': token.value,
-        'roomid': selectedChatRoom.value.roomId.toString()
+        'roomid': selectedChatRoom.value.roomId
       };
       final response = await http.get(
           Uri.parse('${Config.apiBaseUrl}/api/getChatsByRoomId'),
@@ -159,5 +161,10 @@ class ChatPageController extends GetxController {
     } catch (error) {
       apiScreenResponse.value = "FAILED";
     }
+  }
+
+  void onLeftPageChange({required String page}) {
+    if (page == selectedLeftPage.value) return;
+    selectedLeftPage.value = page;
   }
 }
