@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: "/chat",
+      initialRoute: "/landing",
       routes: {
         AppRoutes.landingRoute: (context) => LandingPage(),
         AppRoutes.getLinkdinUserRoute: (context) => GetLinkdinUser(token: ""),
