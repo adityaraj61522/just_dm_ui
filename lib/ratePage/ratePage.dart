@@ -73,7 +73,7 @@ class RatePage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Set Network Rate (₹)',
+          'Set Network Rate',
           style: TextStyle(
             fontSize: 16,
             color: Colors.black54,
@@ -82,10 +82,11 @@ class RatePage extends StatelessWidget {
         const SizedBox(height: 5),
         SizedBox(
           width: width,
-          child: const TextField(
-            decoration: InputDecoration(
+          child: TextField(
+            controller: controller.textController,
+            decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              hintText: '500',
+              hintText: '₹ 500',
             ),
             keyboardType: TextInputType.number,
           ),

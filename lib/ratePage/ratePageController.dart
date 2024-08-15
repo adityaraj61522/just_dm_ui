@@ -10,11 +10,9 @@ import 'dart:html' as html;
 
 class RatePageController extends GetxController {
   final String linketLogo = "https://imgur.com/a/tkIVVeF";
-
-  final List<String> technologyNameList = [];
-  final List<String> technologyLinkList = [];
   final apiResponse = "PASS".obs;
   final token = ''.obs;
+  final TextEditingController textController = TextEditingController();
   @override
   void onInit() {
     super.onInit();
@@ -31,7 +29,7 @@ class RatePageController extends GetxController {
       final response = await http
           .get(Uri.parse('${Config.apiBaseUrl}/api/setRate'), headers: {
         'token': token.value,
-        'rate': '500',
+        'rate': textController.text,
       });
 
       if (response.statusCode == 200) {

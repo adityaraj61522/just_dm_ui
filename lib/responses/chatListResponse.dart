@@ -24,6 +24,7 @@ class ChatListUserData {
   final String roomId;
   final String userId;
   final String name;
+  final String userName;
   final String chatText;
   final String chatImg;
   final String chatDate;
@@ -33,6 +34,7 @@ class ChatListUserData {
     required this.roomId,
     required this.userId,
     required this.name,
+    required this.userName,
     required this.chatText,
     required this.chatImg,
     required this.chatDate,
@@ -44,6 +46,7 @@ class ChatListUserData {
       roomId: json['roomId'] ?? '',
       userId: json['userId'] ?? '',
       name: json['name'] ?? '',
+      userName: json['userName'] ?? '',
       chatText: json['chatText'] ?? '',
       chatImg: json['chatImg'] ?? '',
       chatDate: json['chatDate'] ?? '',

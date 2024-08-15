@@ -71,21 +71,22 @@ class ChatPage extends StatelessWidget {
               Obx(
                 () {
                   if (controller.selectedLeftPage.value == "CHAT") {
-                    return buildChatList(boxHeight: constraints.maxHeight - 50);
+                    return buildChatList(constraints: constraints);
                   }
                   if (controller.selectedLeftPage.value == "WALLET") {
-                    return buildWalletPage(
-                        boxHeight: constraints.maxHeight - 50);
+                    return buildWalletPage(constraints: constraints);
                   }
                   if (controller.selectedLeftPage.value == "PROFILE") {
-                    return buildProfilePage(
-                        boxHeight: constraints.maxHeight - 50);
+                    return buildProfilePage(constraints: constraints);
                   }
                   return (SizedBox.shrink());
                 },
               ),
+              const Divider(
+                height: 1,
+              ),
               Container(
-                height: 50,
+                height: 49,
                 color: Colors.white,
                 child: Row(
                   children: [
@@ -134,9 +135,9 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Widget buildChatList({required boxHeight}) {
+  Widget buildChatList({required BoxConstraints constraints}) {
     return Container(
-      height: boxHeight,
+      height: constraints.maxHeight - 50,
       color: Colors.white,
       child: ListView(
         children: controller.chatList.map((chatUser) {
@@ -151,27 +152,143 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Widget buildWalletPage({required boxHeight}) {
+  Widget buildWalletPage({required BoxConstraints constraints}) {
     return Container(
-      height: boxHeight,
+      height: constraints.maxHeight - 50,
       color: Colors.white,
-      child: Row(
-        children: [Text("Your Current Balance : ₹")],
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Obx(() {
+              return Text(
+                  "Your Current Balance : ₹ ${controller.userData.value.balance}");
+            }),
+            20.verticalSpace,
+            buildWalletFields(
+              constraints: constraints,
+              inputLabel: "Enter amount you want to add to wallet",
+              textController: controller.addAmountController,
+              buttonLabel: 'Load Wallet',
+              onSubmit: () => controller.onLoadWalletButtonClicked(),
+            ),
+            20.verticalSpace,
+            buildWalletFields(
+              constraints: constraints,
+              inputLabel: "Enter amount you want to withdraw from wallet",
+              textController: controller.withdrawAmountController,
+              buttonLabel: 'Withdraw',
+              onSubmit: () => controller.onWithdrawWalletButtonClicked(),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget buildProfilePage({required boxHeight}) {
+  Widget buildWalletFields({
+    required BoxConstraints constraints,
+    required String inputLabel,
+    required TextEditingController textController,
+    required String buttonLabel,
+    required Function() onSubmit,
+  }) {
+    return SizedBox(
+      width: constraints.maxWidth,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(inputLabel),
+          10.verticalSpace,
+          TextField(
+            controller: textController,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              hintText: '₹ 500',
+            ),
+            keyboardType: TextInputType.number,
+          ),
+          10.verticalSpace,
+          ElevatedButton(
+            onPressed: () => onSubmit.call(),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              backgroundColor: const Color.fromARGB(255, 0, 102, 153),
+            ),
+            child: Text(
+              buttonLabel,
+              style: const TextStyle(fontSize: 16, color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildProfilePage({required BoxConstraints constraints}) {
     return Container(
-      height: boxHeight,
+      height: constraints.maxHeight - 50,
       color: Colors.white,
-      child: Text("PROFILE"),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            20.verticalSpace,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                    radius: 50, child: Text(controller.userData.value.name[0])),
+                10.verticalSpace,
+                Text(
+                  controller.userData.value.name,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            20.verticalSpace,
+            Divider(),
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                child: Text("About")),
+            Divider(),
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                child: Text("Term of Service")),
+            Divider(),
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                child: Text("Privecy Policy")),
+            Divider()
+          ],
+        ),
+      ),
     );
   }
 
   Widget buildChatScreen() {
     return Column(
       children: <Widget>[
+        Container(
+          height: 50,
+          padding: const EdgeInsets.all(10),
+          child: Row(
+            children: [
+              CircleAvatar(
+                  child: Text(controller.selectedChatRoom.value.name[0])),
+              10.horizontalSpace,
+              Text(
+                controller.selectedChatRoom.value.name,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+        ),
         Expanded(
           child: Obx(() {
             // Access the observable list directly
@@ -308,12 +425,10 @@ Widget ChatMessageTile({required ChatMessage chat}) {
                   chat.sent ? MainAxisAlignment.end : MainAxisAlignment.start,
               children: <Widget>[
                 Center(
-                  child: Container(
-                    child: Text(
-                      chat.chatText,
-                      style: TextStyle(
-                          color: chat.sent ? Colors.white : Colors.blueGrey),
-                    ),
+                  child: Text(
+                    chat.chatText,
+                    style: TextStyle(
+                        color: chat.sent ? Colors.white : Colors.blueGrey),
                   ),
                 ),
                 30.horizontalSpace,

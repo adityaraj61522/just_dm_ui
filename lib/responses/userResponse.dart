@@ -36,20 +36,23 @@ class UserData {
   final String email;
   final String picture;
   final int rate;
+  final int balance;
+  final String userName;
 
-  UserData({
-    required this.id,
-    required this.sub,
-    required this.emailVerified,
-    required this.name,
-    required this.localeCountry,
-    required this.localeLanguage,
-    required this.givenName,
-    required this.familyName,
-    required this.email,
-    required this.picture,
-    required this.rate,
-  });
+  UserData(
+      {required this.id,
+      required this.sub,
+      required this.emailVerified,
+      required this.name,
+      required this.localeCountry,
+      required this.localeLanguage,
+      required this.givenName,
+      required this.familyName,
+      required this.email,
+      required this.picture,
+      required this.rate,
+      required this.balance,
+      required this.userName});
 
   factory UserData.fromMap(Map<String, dynamic> map) {
     return UserData(
@@ -64,6 +67,8 @@ class UserData {
       email: map['email'] ?? '',
       picture: map['picture'] ?? '',
       rate: map['rate'] ?? 0,
+      balance: map['balance'] ?? 0,
+      userName: map['userName'] ?? '',
     );
   }
 }

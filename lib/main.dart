@@ -4,9 +4,14 @@ import 'package:just_dm_ui/landingPage/landingPage.dart';
 import 'package:just_dm_ui/ratePage/ratePage.dart';
 import 'package:just_dm_ui/routes/routesUtils.dart';
 import 'package:flutter/material.dart';
+import 'dart:html' as html;
 
 void main() {
   runApp(const MyApp());
+}
+
+saveToLocalStorage(String value) {
+  html.window.localStorage["chatWith"] = value;
 }
 
 class MyApp extends StatelessWidget {
@@ -30,6 +35,13 @@ class MyApp extends StatelessWidget {
       },
       onGenerateRoute: (settings) {
         final uri = Uri.parse(settings.name!);
+        if (uri.pathSegments.length == 2 &&
+            uri.pathSegments.first.contains("chatWith")) {
+          saveToLocalStorage(uri.pathSegments.last);
+          return MaterialPageRoute(
+            builder: (context) => LandingPage(),
+          );
+        }
         if (uri.pathSegments.length == 2 &&
             uri.pathSegments.first == 'getLinkdinUser') {
           final token = uri.pathSegments[1];
