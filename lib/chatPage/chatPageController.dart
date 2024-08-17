@@ -57,7 +57,7 @@ class ChatPageController extends GetxController {
   }
 
   final IO.Socket socket = IO.io(
-      'http://192.168.0.202:7000',
+      Config.socketBaseUrl,
       IO.OptionBuilder()
           .setTransports(['websocket']) // for Flutter or Dart VM
           .disableAutoConnect() // disable auto-connection
