@@ -22,6 +22,7 @@ class ChatListResponse {
 
 class ChatListUserData {
   final String roomId;
+  final bool isPaid;
   final String userId;
   final String name;
   final String userName;
@@ -29,9 +30,11 @@ class ChatListUserData {
   final String chatImg;
   final String chatDate;
   final int unreadCount;
+  final int rate;
 
   ChatListUserData({
     required this.roomId,
+    required this.isPaid,
     required this.userId,
     required this.name,
     required this.userName,
@@ -39,11 +42,13 @@ class ChatListUserData {
     required this.chatImg,
     required this.chatDate,
     required this.unreadCount,
+    required this.rate,
   });
 
   factory ChatListUserData.fromMap(Map<String, dynamic> json) {
     return ChatListUserData(
       roomId: json['roomId'] ?? '',
+      isPaid: json['isPaid'] ?? false,
       userId: json['userId'] ?? '',
       name: json['name'] ?? '',
       userName: json['userName'] ?? '',
@@ -51,6 +56,7 @@ class ChatListUserData {
       chatImg: json['chatImg'] ?? '',
       chatDate: json['chatDate'] ?? '',
       unreadCount: json['unreadCount'] ?? 1,
+      rate: json['rate'] ?? 0,
     );
   }
 }

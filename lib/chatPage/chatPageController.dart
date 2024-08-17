@@ -288,4 +288,38 @@ class ChatPageController extends GetxController {
   saveToLocalStorage(String key, String value) {
     html.window.localStorage[key] = value;
   }
+
+  payToUnlockChat() async {
+    apiScreenResponse.value = "LOADING";
+    try {
+      final Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'token': token.value,
+        'roomid': selectedChatRoom.value.roomId
+      };
+      final response = await http.get(
+          Uri.parse('${Config.apiBaseUrl}/api/payToUnlockChat'),
+          headers: headers);
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        apiScreenResponse.value = "PASS";
+        if (response.body.isNotEmpty) {
+          var responseData = json.decode(response.body);
+          var payChatResponse = LoginResponse.fromMap(responseData);
+          if (payChatResponse.code == 200 &&
+              payChatResponse.status == "SUCCESS") {
+            fetchChatList();
+          } else {
+            apiScreenResponse.value = "FAILED";
+          }
+        } else {
+          apiScreenResponse.value = "FAILED";
+        }
+      } else {
+        apiScreenResponse.value = "FAILED";
+      }
+    } catch (error) {
+      apiScreenResponse.value = "FAILED";
+    }
+  }
 }

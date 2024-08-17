@@ -124,7 +124,10 @@ class ChatPage extends StatelessWidget {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (controller.apiScreenResponse.value == "PASS") {
+            } else if (!controller.selectedChatRoom.value.isPaid) {
+              return buildOverLay();
+            } else if (controller.selectedChatRoom.value.isPaid &&
+                controller.apiScreenResponse.value == "PASS") {
               return buildChatScreen();
             } else {
               return const SizedBox.shrink();
@@ -132,6 +135,34 @@ class ChatPage extends StatelessWidget {
           }),
         ),
       ],
+    );
+  }
+
+  Widget buildOverLay() {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Container(
+          color: Colors.black.withOpacity(0.7),
+          width: constraints.maxWidth,
+          height: constraints.maxWidth,
+          child: Center(
+            child: AlertDialog(
+              title: Text(
+                  'This chat  Requires ₹${controller.selectedChatRoom.value.rate}'),
+              content: Text(
+                  'Your current balance is ₹ ${controller.userData.value.balance}'),
+              actions: [
+                Center(
+                  child: TextButton(
+                    onPressed: () => controller.payToUnlockChat(),
+                    child: Text('Pay Now'),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
