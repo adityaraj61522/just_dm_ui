@@ -16,6 +16,9 @@ class ChatPageController extends GetxController {
   final selectedChatRoom = ChatListUserData.fromMap({}).obs;
 
   final TextEditingController textController = TextEditingController();
+
+  final ScrollController scrollController = ScrollController();
+
   final imageUploadUrl = ''.obs;
 
   final token = ''.obs;
@@ -43,6 +46,12 @@ class ChatPageController extends GetxController {
       selectedChatWith.value = chatWith;
     }
     await fetchChatList();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   String? getFromLocalStorage(String key) {
@@ -76,7 +85,11 @@ class ChatPageController extends GetxController {
     });
 
     socket.on('receiveMessage', (data) {
-      chatMessageList.add(data);
+      print("message received---------------------------${data}");
+      final chatMessage = ChatMessage.fromMap(data);
+
+      chatMessageList.add(chatMessage);
+      scrollToBottom();
     });
 
     socket.on('disconnect', (_) {
@@ -104,7 +117,9 @@ class ChatPageController extends GetxController {
     );
 
     chatMessageList.add(chatMessage);
+    print('message  sent  -------${chatMessage}');
     textController.clear();
+    scrollToBottom();
   }
 
   fetchChatList() async {
@@ -132,6 +147,7 @@ class ChatPageController extends GetxController {
                   chatList.where((e) => e.userName == selectedChatWith.value);
               if (selectedChat.isNotEmpty) {
                 selectedChatRoom.value = selectedChat.first;
+                await connectToServer();
                 await fetchChatByRoom();
               }
             }
@@ -169,6 +185,7 @@ class ChatPageController extends GetxController {
           if (chatListResponse.code == 200 &&
               chatListResponse.status == "SUCCESS") {
             chatMessageList.value = chatListResponse.data;
+            scrollToBottom();
           } else {
             apiScreenResponse.value = "FAILED";
           }
@@ -321,5 +338,15 @@ class ChatPageController extends GetxController {
     } catch (error) {
       apiScreenResponse.value = "FAILED";
     }
+  }
+
+  void scrollToBottom() {
+    Future.delayed(Duration(milliseconds: 300), () {
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
   }
 }

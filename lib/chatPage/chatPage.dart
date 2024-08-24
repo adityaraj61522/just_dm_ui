@@ -124,7 +124,8 @@ class ChatPage extends StatelessWidget {
               return const Center(
                 child: CircularProgressIndicator(),
               );
-            } else if (!controller.selectedChatRoom.value.isPaid) {
+            } else if (!controller.selectedChatRoom.value.isPaid &&
+                controller.apiScreenResponse.value == "PASS") {
               return buildOverLay();
             } else if (controller.selectedChatRoom.value.isPaid &&
                 controller.apiScreenResponse.value == "PASS") {
@@ -329,6 +330,8 @@ class ChatPage extends StatelessWidget {
               color: Colors.white,
               padding: const EdgeInsets.all(20),
               child: ListView.builder(
+                controller: controller.scrollController,
+                shrinkWrap: true,
                 itemCount: messages.length, // Use length of observable list
                 itemBuilder: (context, index) {
                   return ChatMessageTile(chat: messages[index]);
