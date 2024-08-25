@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:just_dm_ui/landingPage/landingPage.dart';
 import 'package:just_dm_ui/responses/chatListResponse.dart';
 import 'package:just_dm_ui/responses/chatResponse.dart';
 import 'package:just_dm_ui/responses/loginResponse.dart';
@@ -348,5 +350,26 @@ class ChatPageController extends GetxController {
         curve: Curves.easeOut,
       );
     });
+  }
+
+  String? clearLocalStorage() {
+    html.window.localStorage.clear();
+  }
+
+  void logout(BuildContext context) {
+    clearLocalStorage();
+    Navigator.pushNamed(context, '/landing');
+  }
+
+  copyLink(BuildContext context){
+    Clipboard.setData(ClipboardData(text: 'Let\'s connect on Linket.Chat! It\'s a quick, easy, and secure platform for messaging. Join the conversation here: https://linket.chat/#/chatWith/${userData.value.userName}')).then((_) {
+          // Show a snackbar to inform the user that the text was copied
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Text copied to clipboard!'),
+              duration: Duration(seconds: 3),
+            ),
+          );
+        });
   }
 }
