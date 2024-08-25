@@ -12,16 +12,68 @@ class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Linket',
+      title: 'Linket.chat!',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 0, 102, 153),
-          title: const Text(
-            'Linket!',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          backgroundColor: Color.fromARGB(255, 0, 128, 128),
+          toolbarHeight: 60,
+          centerTitle: true,
+          leadingWidth: 150,
+          leading: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: InkWell(
+              onTap: () => controller.copyLink(context),
+              child: Row(
+                children: [
+                  10.horizontalSpace,
+                  const Icon(Icons.share, color: Colors.white),
+                  10.horizontalSpace,
+                  const Text(
+                    "Share Link",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          title: Row(
+            children: [
+              Spacer(),
+              const Text(
+                'Linket.chat!',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25),
+              ),
+              Spacer(),
+              InkWell(
+                onTap: () => controller.logout(context),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.logout,
+                      color: Colors.white,
+                    ),
+                    10.horizontalSpace,
+                    Text(
+                      "Logout",
+                      style: TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                    10.horizontalSpace,
+                  ],
+                ),
+              )
+            ],
           ),
         ),
         body: Obx(
@@ -47,7 +99,9 @@ class ChatPage extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         if (constraints.maxWidth > 950) {
-          return ChatScreen(constraints: constraints);
+          return Container(
+              color: const Color.fromARGB(255, 0, 128, 128),
+              child: ChatScreen(constraints: constraints));
         } else {
           return Container(
             child: buildMobileContent(),
@@ -66,7 +120,7 @@ class ChatPage extends StatelessWidget {
       children: [
         Expanded(
           flex: 1,
-          child: Column(
+          child: Stack(
             children: [
               Obx(
                 () {
@@ -82,35 +136,82 @@ class ChatPage extends StatelessWidget {
                   return (SizedBox.shrink());
                 },
               ),
-              const Divider(
-                height: 1,
-              ),
-              Container(
-                height: 49,
-                color: Colors.white,
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: () => controller.onLeftPageChange(page: "CHAT"),
-                        child: Center(child: Text("Chat")),
+              Positioned(
+                top: constraints.maxHeight - 70,
+                left: 70,
+                right: 70,
+                bottom: 30,
+                child: Obx(
+                  () {
+                    return Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(50))),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: InkWell(
+                              onTap: () =>
+                                  controller.onLeftPageChange(page: "CHAT"),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(50)),
+                                    color: controller.selectedLeftPage.value ==
+                                            "CHAT"
+                                        ? Color.fromARGB(255, 0, 128, 128)
+                                        : Colors.white),
+                                child: Center(
+                                    child: Icon(
+                                  Icons.chat,
+                                  color: controller.selectedLeftPage.value ==
+                                          "CHAT"
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                              ),
+                            ),
+                          ),
+                          // Expanded(
+                          //   child: InkWell(
+                          //     onTap: () =>
+                          //         controller.onLeftPageChange(page: "WALLET"),
+                          //     child: Center(child: Text("Wallet")),
+                          //   ),
+                          // ),
+                          Expanded(
+                            child: InkWell(
+                              onTap: () =>
+                                  controller.onLeftPageChange(page: "PROFILE"),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(50)),
+                                    color: controller.selectedLeftPage.value ==
+                                            "PROFILE"
+                                        ? Color.fromARGB(255, 0, 128, 128)
+                                        : Colors.white),
+                                child: Center(
+                                    child: Icon(
+                                  Icons.person_outlined,
+                                  color: controller.selectedLeftPage.value ==
+                                          "PROFILE"
+                                      ? Colors.white
+                                      : Colors.black,
+                                )),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () =>
-                            controller.onLeftPageChange(page: "WALLET"),
-                        child: Center(child: Text("Wallet")),
-                      ),
-                    ),
-                    Expanded(
-                      child: InkWell(
-                        onTap: () =>
-                            controller.onLeftPageChange(page: "PROFILE"),
-                        child: Center(child: Text("Profile")),
-                      ),
-                    ),
-                  ],
+                    );
+                  },
                 ),
               )
             ],
@@ -121,8 +222,15 @@ class ChatPage extends StatelessWidget {
           flex: 3,
           child: Obx(() {
             if (controller.apiScreenResponse.value == "LOADING") {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Container(
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(50),
+                    ),
+                    color: Colors.white),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
               );
             } else if (!controller.selectedChatRoom.value.isPaid &&
                 controller.apiScreenResponse.value == "PASS") {
@@ -131,7 +239,12 @@ class ChatPage extends StatelessWidget {
                 controller.apiScreenResponse.value == "PASS") {
               return buildChatScreen();
             } else {
-              return const SizedBox.shrink();
+              return Container(
+                decoration: BoxDecoration(
+                    borderRadius:
+                        const BorderRadius.only(topRight: Radius.circular(50)),
+                    color: Colors.white),
+              );
             }
           }),
         ),
@@ -169,14 +282,20 @@ class ChatPage extends StatelessWidget {
 
   Widget buildChatList({required BoxConstraints constraints}) {
     return Container(
-      height: constraints.maxHeight - 50,
-      color: Colors.white,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(50),
+        ),
+        color: Colors.white,
+      ),
+      height: constraints.maxHeight,
+      padding: EdgeInsets.only(top: 15),
       child: ListView(
         children: controller.chatList.map((chatUser) {
           return Column(
             children: [
               _buildChatUserTile(chatUser: chatUser),
-              const Divider(),
+              // const Divider(),
             ],
           );
         }).toList(),
@@ -186,7 +305,7 @@ class ChatPage extends StatelessWidget {
 
   Widget buildWalletPage({required BoxConstraints constraints}) {
     return Container(
-      height: constraints.maxHeight - 50,
+      height: constraints.maxHeight,
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -248,7 +367,7 @@ class ChatPage extends StatelessWidget {
             onPressed: () => onSubmit.call(),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 15),
-              backgroundColor: const Color.fromARGB(255, 0, 102, 153),
+              backgroundColor: Color.fromARGB(255, 0, 128, 128),
             ),
             child: Text(
               buttonLabel,
@@ -262,8 +381,13 @@ class ChatPage extends StatelessWidget {
 
   Widget buildProfilePage({required BoxConstraints constraints}) {
     return Container(
-      height: constraints.maxHeight - 50,
-      color: Colors.white,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(50),
+        ),
+        color: Colors.white,
+      ),
+      height: constraints.maxHeight,
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -307,6 +431,12 @@ class ChatPage extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(50),
+            ),
+            color: Colors.white,
+          ),
           height: 50,
           padding: const EdgeInsets.all(10),
           child: Row(
@@ -320,6 +450,9 @@ class ChatPage extends StatelessWidget {
               )
             ],
           ),
+        ),
+        CommonDivider(
+          direction: "H",
         ),
         Expanded(
           child: Obx(() {
@@ -357,36 +490,61 @@ class ChatPage extends StatelessWidget {
   }
 
   Widget _buildChatUserTile({required ChatListUserData chatUser}) {
-    return ListTile(
-      onTap: () => controller.onChatTileClicked(chatUser: chatUser),
-      leading: CircleAvatar(child: Text(chatUser.name[0])),
-      tileColor: Colors.white,
-      hoverColor: Colors.white,
-      title: Text(chatUser.name),
-      subtitle: Text(chatUser.chatText),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          if (chatUser.unreadCount > 0)
-            Container(
-              margin: const EdgeInsets.only(top: 5.0),
-              padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 6),
-              width: 20,
-              height: 20,
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                chatUser.unreadCount.toString(),
-                style: const TextStyle(color: Colors.white, fontSize: 10.0),
+    final _isHovered = false.obs;
+
+    void _onHover(bool isHovered) {
+      _isHovered.value = isHovered;
+    }
+
+    return Obx(
+      () {
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          onEnter: (_) => _onHover(true),
+          onExit: (_) => _onHover(false),
+          child: GestureDetector(
+            onTap: () => controller.onChatTileClicked(chatUser: chatUser),
+            child: Container(
+              color: _isHovered.value
+                  ? const Color.fromARGB(255, 0, 128, 128).withOpacity(.10)
+                  : Colors.transparent,
+              child: ListTile(
+                onTap: () => controller.onChatTileClicked(chatUser: chatUser),
+                leading: CircleAvatar(child: Text(chatUser.name[0])),
+                title: Text(chatUser.name),
+                subtitle: Text(
+                  chatUser.chatText,
+                  style: TextStyle(overflow: TextOverflow.ellipsis),
+                ),
+                enabled: true,
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    if (chatUser.unreadCount > 0)
+                      // Container(
+                      //   margin: const EdgeInsets.only(top: 5.0),
+                      //   padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 13),
+                      //   width: 80,
+                      //   height: 22,
+                      //   decoration: BoxDecoration(
+                      //     color: Color.fromARGB(255, 0, 128, 128),
+                      //     borderRadius: BorderRadius.circular(20),
+                      //   ),
+                      //   child: Text(
+                      //     "Your Turn",
+                      //     style: const TextStyle(color: Colors.white, fontSize: 10.0, fontWeight: FontWeight.normal),
+                      //   ),
+                      // ),
+                      5.verticalSpace,
+                    Text(chatUser.chatDate),
+                  ],
+                ),
               ),
             ),
-          5.verticalSpace,
-          Text(chatUser.chatDate),
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -437,37 +595,36 @@ Widget ChatMessageTile({required ChatMessage chat}) {
     children: [
       if (chat.sent) Expanded(child: SizedBox.shrink()),
       Container(
-        margin: const EdgeInsets.symmetric(vertical: 10.0),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 5,
-        ),
-        decoration: BoxDecoration(
-          color:
-              chat.sent ? const Color.fromARGB(255, 0, 102, 153) : Colors.white,
-          borderRadius: BorderRadius.circular(50.0),
-          border: Border.all(
-            color: const Color.fromARGB(255, 216, 213, 213), // Border color
-            width: 1.0, // Border width
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 5,
           ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment:
-                  chat.sent ? MainAxisAlignment.end : MainAxisAlignment.start,
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    chat.chatText,
-                    style: TextStyle(
-                        color: chat.sent ? Colors.white : Colors.blueGrey),
-                  ),
-                ),
-                30.horizontalSpace,
-                Container(
-                  margin: const EdgeInsets.only(top: 5.0),
+          decoration: BoxDecoration(
+            color: chat.sent ? Color.fromARGB(255, 0, 128, 128) : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: const Color.fromARGB(255, 216, 213, 213), // Border color
+              width: 1.0, // Border width
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment:
+                chat.sent ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Text(
+                chat.chatText,
+                style: TextStyle(
+                    color: chat.sent ? Colors.white : Colors.blueGrey,
+                    overflow: TextOverflow.visible),
+                maxLines: null,
+              ),
+              30.horizontalSpace,
+              Container(
+                margin: const EdgeInsets.only(top: 5.0),
+                child: Expanded(
                   child: Text(
                     chat.chatDate,
                     style: TextStyle(
@@ -477,9 +634,9 @@ Widget ChatMessageTile({required ChatMessage chat}) {
                             : const Color.fromARGB(255, 100, 100, 100)),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     ],
