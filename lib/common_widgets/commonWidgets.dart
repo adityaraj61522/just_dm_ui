@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
 class CommonDivider extends StatelessWidget {
-  const CommonDivider({Key? key, this.direction}) : super(key: key);
+  const CommonDivider({super.key, this.direction});
   final String? direction;
 
   @override
   Widget build(Object context) {
     if (direction == "H") {
-      return Divider(
+      return const Divider(
         height: 1,
         color: Color.fromARGB(255, 221, 218, 218),
       );
     }
-    return VerticalDivider(
+    return const VerticalDivider(
       width: 1,
-      color:  const Color.fromARGB(255, 180, 180, 180),
+      color: Color.fromARGB(255, 180, 180, 180),
     );
   }
 }
@@ -90,7 +90,7 @@ extension Space on int {
 
 class ImageTextCell extends StatelessWidget {
   const ImageTextCell({
-    Key? key,
+    super.key,
     this.img,
     this.height,
     this.width,
@@ -107,7 +107,7 @@ class ImageTextCell extends StatelessWidget {
     this.borderRadius = 0,
     this.onTap,
     this.trimImgBorder = false,
-  }) : super(key: key);
+  });
   final String? img;
   final double? height;
   final double? width;
@@ -179,14 +179,14 @@ class ImageTextCell extends StatelessWidget {
 
 class CommonButton extends StatelessWidget {
   const CommonButton({
-    Key? key,
+    super.key,
     this.img,
     this.text,
     this.width,
     this.height,
     this.spaceBetweenImgAndText = 5,
     this.onTap,
-  }) : super(key: key);
+  });
   final String? img;
   final String? text;
   final double? height;
@@ -202,9 +202,9 @@ class CommonButton extends StatelessWidget {
         height: height,
         width: width,
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 23, 95, 177),
+          color: const Color.fromARGB(255, 23, 95, 177),
           border: Border.all(
-            color: Color.fromARGB(255, 23, 95, 177),
+            color: const Color.fromARGB(255, 23, 95, 177),
             width: 2.0,
             style: BorderStyle.solid,
           ),

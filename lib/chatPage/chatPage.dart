@@ -223,8 +223,8 @@ class ChatPage extends StatelessWidget {
           child: Obx(() {
             if (controller.apiScreenResponse.value == "LOADING") {
               return Container(
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
                       topRight: Radius.circular(50),
                     ),
                     color: Colors.white),
@@ -237,12 +237,12 @@ class ChatPage extends StatelessWidget {
               return buildOverLay();
             } else if (controller.selectedChatRoom.value.isPaid &&
                 controller.apiScreenResponse.value == "PASS") {
-              return buildChatScreen();
+              return buildChatScreen(constraints: constraints);
             } else {
               return Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     borderRadius:
-                        const BorderRadius.only(topRight: Radius.circular(50)),
+                        BorderRadius.only(topRight: Radius.circular(50)),
                     color: Colors.white),
               );
             }
@@ -282,14 +282,14 @@ class ChatPage extends StatelessWidget {
 
   Widget buildChatList({required BoxConstraints constraints}) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(50),
         ),
         color: Colors.white,
       ),
       height: constraints.maxHeight,
-      padding: EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.only(top: 15),
       child: ListView(
         children: controller.chatList.map((chatUser) {
           return Column(
@@ -403,58 +403,41 @@ class ChatPage extends StatelessWidget {
                 10.verticalSpace,
                 Text(
                   controller.userData.value.name,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
             20.verticalSpace,
-            Divider(),
+            const Divider(),
             Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: Text("About")),
-            Divider(),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                child: const Text("About")),
+            const Divider(),
             Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: Text("Term of Service")),
-            Divider(),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                child: const Text("Term of Service")),
+            const Divider(),
             Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: Text("Privecy Policy")),
-            Divider()
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                child: const Text("Privecy Policy")),
+            const Divider()
           ],
         ),
       ),
     );
   }
 
-  Widget buildChatScreen() {
+  Widget buildChatScreen({required BoxConstraints constraints}) {
     return Column(
       children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(50),
-            ),
-            color: Colors.white,
-          ),
-          height: 50,
-          padding: const EdgeInsets.all(10),
-          child: Row(
-            children: [
-              CircleAvatar(
-                  child: Text(controller.selectedChatRoom.value.name[0])),
-              10.horizontalSpace,
-              Text(
-                controller.selectedChatRoom.value.name,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              )
-            ],
-          ),
-        ),
-        CommonDivider(
-          direction: "H",
-        ),
-        Expanded(
+        buildChatingWithTile(),
+        const CommonDivider(direction: "H"),
+        SizedBox(
+          height: constraints.maxHeight - 103,
+          width: constraints.maxWidth,
           child: Obx(() {
             // Access the observable list directly
             final messages = controller.chatMessageList;
@@ -467,13 +450,15 @@ class ChatPage extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: messages.length, // Use length of observable list
                 itemBuilder: (context, index) {
-                  return ChatMessageTile(chat: messages[index]);
+                  return chatMessageTile(
+                      chat: messages[index], context: context);
                 },
               ),
             );
           }),
         ),
         Container(
+          height: 42,
           padding: const EdgeInsets.symmetric(horizontal: 15),
           color: Colors.white,
           child: ChatInputField(
@@ -486,6 +471,29 @@ class ChatPage extends StatelessWidget {
           color: Colors.white,
         ),
       ],
+    );
+  }
+
+  Widget buildChatingWithTile() {
+    return Container(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(50),
+        ),
+        color: Colors.white,
+      ),
+      height: 50,
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        children: [
+          CircleAvatar(child: Text(controller.selectedChatRoom.value.name[0])),
+          10.horizontalSpace,
+          Text(
+            controller.selectedChatRoom.value.name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          )
+        ],
+      ),
     );
   }
 
@@ -514,7 +522,7 @@ class ChatPage extends StatelessWidget {
                 title: Text(chatUser.name),
                 subtitle: Text(
                   chatUser.chatText,
-                  style: TextStyle(overflow: TextOverflow.ellipsis),
+                  style: const TextStyle(overflow: TextOverflow.ellipsis),
                 ),
                 enabled: true,
                 trailing: Column(
@@ -547,13 +555,69 @@ class ChatPage extends StatelessWidget {
       },
     );
   }
+
+  Widget chatMessageTile(
+      {required BuildContext context, required ChatMessage chat}) {
+    return Row(
+      children: [
+        if (chat.sent) const Spacer(),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 10.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 5,
+          ),
+          decoration: BoxDecoration(
+            color: chat.sent
+                ? const Color.fromARGB(255, 0, 128, 128)
+                : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: chat.sent
+                  ? Colors.transparent
+                  : const Color.fromARGB(255, 216, 213, 213), // Border color
+              width: 1.0, // Border width
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: <Widget>[
+              Container(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width *
+                      0.5, // Limit width to 50% of the screen
+                ),
+                child: Text(
+                  chat.chatText,
+                  style: TextStyle(
+                      color: chat.sent ? Colors.white : Colors.blueGrey,
+                      overflow: TextOverflow.visible),
+                  maxLines: null,
+                ),
+              ),
+              20.horizontalSpace,
+              Text(
+                chat.chatDate,
+                style: TextStyle(
+                    fontSize: 10,
+                    color: chat.sent
+                        ? const Color.fromARGB(255, 219, 213, 213)
+                        : const Color.fromARGB(255, 100, 100, 100)),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 class ChatInputField extends StatelessWidget {
   final TextEditingController controller;
   final ValueChanged<String> onSubmitted;
 
-  ChatInputField({required this.onSubmitted, required this.controller});
+  const ChatInputField(
+      {super.key, required this.onSubmitted, required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -566,79 +630,27 @@ class ChatInputField extends StatelessWidget {
           width: 1.0, // Border width
         ),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: <Widget>[
           IconButton(
-            icon: Icon(Icons.attach_file),
+            icon: const Icon(Icons.attach_file),
             onPressed: () {},
           ),
           Expanded(
             child: TextField(
               controller: controller,
               onSubmitted: onSubmitted,
-              decoration: InputDecoration.collapsed(hintText: "Send a message"),
+              decoration:
+                  const InputDecoration.collapsed(hintText: "Send a message"),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
             onPressed: () => onSubmitted(controller.text),
           ),
         ],
       ),
     );
   }
-}
-
-Widget ChatMessageTile({required ChatMessage chat}) {
-  return Row(
-    children: [
-      if (chat.sent) Expanded(child: SizedBox.shrink()),
-      Container(
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 10.0),
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 5,
-          ),
-          decoration: BoxDecoration(
-            color: chat.sent ? Color.fromARGB(255, 0, 128, 128) : Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: const Color.fromARGB(255, 216, 213, 213), // Border color
-              width: 1.0, // Border width
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment:
-                chat.sent ? MainAxisAlignment.end : MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                chat.chatText,
-                style: TextStyle(
-                    color: chat.sent ? Colors.white : Colors.blueGrey,
-                    overflow: TextOverflow.visible),
-                maxLines: null,
-              ),
-              30.horizontalSpace,
-              Container(
-                margin: const EdgeInsets.only(top: 5.0),
-                child: Expanded(
-                  child: Text(
-                    chat.chatDate,
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: chat.sent
-                            ? const Color.fromARGB(255, 219, 213, 213)
-                            : const Color.fromARGB(255, 100, 100, 100)),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    ],
-  );
 }

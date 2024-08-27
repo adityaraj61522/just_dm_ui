@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:just_dm_ui/landingPage/landingPage.dart';
 import 'package:just_dm_ui/responses/chatListResponse.dart';
 import 'package:just_dm_ui/responses/chatResponse.dart';
 import 'package:just_dm_ui/responses/loginResponse.dart';
@@ -343,16 +342,16 @@ class ChatPageController extends GetxController {
   }
 
   void scrollToBottom() {
-    Future.delayed(Duration(milliseconds: 300), () {
+    Future.delayed(const Duration(milliseconds: 300), () {
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
     });
   }
 
-  String? clearLocalStorage() {
+  void clearLocalStorage() {
     html.window.localStorage.clear();
   }
 
@@ -361,15 +360,18 @@ class ChatPageController extends GetxController {
     Navigator.pushNamed(context, '/landing');
   }
 
-  copyLink(BuildContext context){
-    Clipboard.setData(ClipboardData(text: 'Let\'s connect on Linket.Chat! It\'s a quick, easy, and secure platform for messaging. Join the conversation here: https://linket.chat/#/chatWith/${userData.value.userName}')).then((_) {
-          // Show a snackbar to inform the user that the text was copied
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Text copied to clipboard!'),
-              duration: Duration(seconds: 3),
-            ),
-          );
-        });
+  copyLink(BuildContext context) {
+    Clipboard.setData(ClipboardData(
+            text:
+                'Let\'s connect on Linket.Chat! It\'s a quick, easy, and secure platform for messaging. Join the conversation here: https://linket.chat/#/chatWith/${userData.value.userName}'))
+        .then((_) {
+      // Show a snackbar to inform the user that the text was copied
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Text copied to clipboard!'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    });
   }
 }

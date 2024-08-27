@@ -5,36 +5,34 @@ import 'package:just_dm_ui/landingPage/landingPageController.dart';
 import 'dart:html' as html;
 
 class LandingPage extends StatefulWidget {
-  final LandingPageController controller =
-      Get.put(LandingPageController());
+  final LandingPageController controller = Get.put(LandingPageController());
 
   @override
   _LandingPageState createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
-
   final token = ''.obs;
 
   String? getFromLocalStorage(String key) {
     return html.window.localStorage[key];
   }
+
   @override
   void initState() {
     super.initState();
     token.value = getFromLocalStorage('auth_token') ?? '';
-    if(token.value.isNotEmpty){
+    if (token.value.isNotEmpty) {
       navigateToChat();
     }
   }
 
-  navigateToChat()async{
-     await widget.controller.getUserData(token.value, context);
-
+  navigateToChat() async {
+    await widget.controller.getUserData(token.value, context);
   }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Obx(() {
         if (widget.controller.apiResponse.value == "LOADING") {
@@ -87,8 +85,8 @@ class LinketScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: Column(
@@ -116,9 +114,9 @@ class LinketScreen extends StatelessWidget {
                 ],
               ),
             ),
-             Expanded(child: 
-                buildHeader(),
-                ),
+            Expanded(
+              child: buildHeader(),
+            ),
           ],
         ),
       ),
