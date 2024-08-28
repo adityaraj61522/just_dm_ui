@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:just_dm_ui/common_widgets/commonWidgets.dart';
-import 'package:just_dm_ui/ratePage/ratePageController.dart';
+import 'package:Linket/common_widgets/commonWidgets.dart';
+import 'package:Linket/ratePage/ratePageController.dart';
 
 class RatePage extends StatelessWidget {
   final RatePageController controller = Get.put(RatePageController());

@@ -3,12 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:just_dm_ui/responses/chatListResponse.dart';
-import 'package:just_dm_ui/responses/chatResponse.dart';
-import 'package:just_dm_ui/responses/loginResponse.dart';
-import 'package:just_dm_ui/responses/userResponse.dart';
+import 'package:Linket/responses/chatListResponse.dart';
+import 'package:Linket/responses/chatResponse.dart';
+import 'package:Linket/responses/loginResponse.dart';
+import 'package:Linket/responses/userResponse.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:just_dm_ui/config.dart';
+import 'package:Linket/config.dart';
 import 'dart:html' as html;
 
 class ChatPageController extends GetxController {

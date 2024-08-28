@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:just_dm_ui/getLinkdinUser/getLinkdinUserController.dart';
+import 'package:Linket/getLinkdinUser/getLinkdinUserController.dart';
 
 class GetLinkdinUser extends StatelessWidget {
   final String token;
@@ -60,7 +60,7 @@ class _TokenHandlerState extends State<TokenHandler> {
 
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
-// import 'package:just_dm_ui/getLinkdinUser/getLinkdinUserController.dart';
+// import 'package:Linket/getLinkdinUser/getLinkdinUserController.dart';
 
 // class GetLinkdinUser extends StatelessWidget {
 //   final String token;

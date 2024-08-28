@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:just_dm_ui/config.dart';
-import 'package:just_dm_ui/ratePage/ratePage.dart';
-import 'package:just_dm_ui/responses/userResponse.dart';
+import 'package:Linket/config.dart';
+import 'package:Linket/ratePage/ratePage.dart';
+import 'package:Linket/responses/userResponse.dart';
 import 'dart:html' as html;
 
 class GetLinkdinUserController extends GetxController {

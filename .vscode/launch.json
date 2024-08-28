@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "just_dm_ui",
+            "name": "Linket",
             "request": "launch",
             "type": "dart",
             "args": [
@@ -13,13 +13,13 @@
             ]
         },
         {
-            "name": "just_dm_ui (profile mode)",
+            "name": "Linket (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "just_dm_ui (release mode)",
+            "name": "Linket (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

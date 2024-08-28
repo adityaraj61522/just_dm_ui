@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "just_dm_ui" "\0"
+            VALUE "FileDescription", "Linket" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "just_dm_ui" "\0"
+            VALUE "InternalName", "Linket" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "just_dm_ui.exe" "\0"
-            VALUE "ProductName", "just_dm_ui" "\0"
+            VALUE "OriginalFilename", "Linket.exe" "\0"
+            VALUE "ProductName", "Linket" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

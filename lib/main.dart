@@ -1,8 +1,8 @@
-import 'package:just_dm_ui/chatPage/chatPage.dart';
-import 'package:just_dm_ui/getLinkdinUser/getLinkdinUser.dart';
-import 'package:just_dm_ui/landingPage/landingPage.dart';
-import 'package:just_dm_ui/ratePage/ratePage.dart';
-import 'package:just_dm_ui/routes/routesUtils.dart';
+import 'package:Linket/chatPage/chatPage.dart';
+import 'package:Linket/getLinkdinUser/getLinkdinUser.dart';
+import 'package:Linket/landingPage/landingPage.dart';
+import 'package:Linket/ratePage/ratePage.dart';
+import 'package:Linket/routes/routesUtils.dart';
 import 'package:flutter/material.dart';
 import 'dart:html' as html;
 

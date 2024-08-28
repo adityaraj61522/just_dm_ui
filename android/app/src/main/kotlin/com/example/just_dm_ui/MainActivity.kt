@@ -1,4 +1,4 @@
-package com.example.just_dm_ui
+package com.example.Linket
 
 import io.flutter.embedding.android.FlutterActivity
 

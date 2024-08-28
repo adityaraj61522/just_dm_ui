@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:just_dm_ui/chatPage/chatPageController.dart';
-import 'package:just_dm_ui/common_widgets/commonWidgets.dart';
-import 'package:just_dm_ui/responses/chatListResponse.dart';
-import 'package:just_dm_ui/responses/chatResponse.dart';
+import 'package:Linket/chatPage/chatPageController.dart';
+import 'package:Linket/common_widgets/commonWidgets.dart';
+import 'package:Linket/responses/chatListResponse.dart';
+import 'package:Linket/responses/chatResponse.dart';
 
 class ChatPage extends StatelessWidget {
   final controller = Get.put(ChatPageController());

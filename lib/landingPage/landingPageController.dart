@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:just_dm_ui/chatPage/chatPage.dart';
-import 'package:just_dm_ui/config.dart';
-import 'package:just_dm_ui/responses/loginResponse.dart';
-import 'package:just_dm_ui/responses/userResponse.dart';
+import 'package:Linket/chatPage/chatPage.dart';
+import 'package:Linket/config.dart';
+import 'package:Linket/responses/loginResponse.dart';
+import 'package:Linket/responses/userResponse.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:html' as html;
 
@@ -72,7 +72,7 @@ class LandingPageController extends GetxController {
     }
   }
 
- Future<void> getUserData(String token, BuildContext context) async {
+  Future<void> getUserData(String token, BuildContext context) async {
     apiResponse.value = "LOADING";
     try {
       final response = await http.get(

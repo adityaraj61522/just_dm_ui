@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:just_dm_ui/common_widgets/commonWidgets.dart';
-import 'package:just_dm_ui/landingPage/landingPageController.dart';
+import 'package:Linket/common_widgets/commonWidgets.dart';
+import 'package:Linket/landingPage/landingPageController.dart';
 import 'dart:html' as html;
 
 class LandingPage extends StatefulWidget {
@@ -77,7 +77,7 @@ class LinketScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final containerHeight = constraints.maxHeight / 3;
+    final containerHeight = constraints.maxHeight / 2;
     return Container(
       width: constraints.maxWidth,
       decoration: BoxDecoration(

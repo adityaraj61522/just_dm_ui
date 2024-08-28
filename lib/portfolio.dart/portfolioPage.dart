@@ -1,34 +1,28 @@
 import 'dart:math';
-import 'package:just_dm_ui/common_widgets/commonWidgets.dart';
-import 'package:just_dm_ui/portfolio.dart/portfolioController.dart';
+import 'package:Linket/common_widgets/commonWidgets.dart';
+import 'package:Linket/portfolio.dart/portfolioController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PortfolioPage
-    extends StatelessWidget {
+class PortfolioPage extends StatelessWidget {
   PortfolioPage({
     Key? key,
   }) : super(key: key);
 
-  final controller =
-      Get.put(LandingPageController());
+  final controller = Get.put(LandingPageController());
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: buildContent());
+    return Scaffold(body: buildContent());
   }
 
   Widget buildContent() {
     return LayoutBuilder(
-      builder: (BuildContext context,
-          BoxConstraints constraints) {
-        if (constraints.maxWidth >
-            950) {
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth > 950) {
           return Container(
             color: Colors.grey.shade900,
-            child:
-                buildDesktopContent(),
+            child: buildDesktopContent(),
           );
         } else {
           return Container(
@@ -59,41 +53,27 @@ class PortfolioPage
   }
 
   Widget buildLeftPannel() {
-    final socialMediaList =
-        controller.socialMediaList;
+    final socialMediaList = controller.socialMediaList;
     return Padding(
-      padding:
-          const EdgeInsets.all(15.0),
+      padding: const EdgeInsets.all(15.0),
       child: LayoutBuilder(
-        builder: (BuildContext context,
-            BoxConstraints
-                constraints) {
+        builder: (BuildContext context, BoxConstraints constraints) {
           return Padding(
-            padding:
-                const EdgeInsets.all(
-                    20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment
-                        .start,
-                mainAxisSize:
-                    MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
                 children: [
                   Texts(
-                    text:
-                        controller.name,
+                    text: controller.name,
                     fontSize: 24,
                     bold: true,
                   ),
                   const Spacer(),
                   ImageTextCell(
-                    img: controller
-                        .profilePhoto,
-                    height: constraints
-                        .maxWidth,
-                    width: constraints
-                            .maxHeight /
-                        2.5,
+                    img: controller.profilePhoto,
+                    height: constraints.maxWidth,
+                    width: constraints.maxHeight / 2.5,
                     borderRadius: 20,
                     trimImgBorder: true,
                   ),
@@ -101,14 +81,12 @@ class PortfolioPage
                     flex: 2,
                   ),
                   Texts(
-                    text: controller
-                        .designation,
+                    text: controller.designation,
                     fontSize: 18,
                   ),
                   3.verticalSpace,
                   Texts(
-                    text: controller
-                        .basedIn,
+                    text: controller.basedIn,
                     fontSize: 14,
                   ),
                   const Spacer(
@@ -116,28 +94,17 @@ class PortfolioPage
                   ),
                   Center(
                     child: Wrap(
-                      spacing: max(
-                          (constraints.maxWidth -
-                                  180) /
-                              4,
-                          10),
+                      spacing: max((constraints.maxWidth - 180) / 4, 10),
                       runSpacing: 10,
-                      alignment:
-                          WrapAlignment
-                              .center,
+                      alignment: WrapAlignment.center,
                       children: [
-                        ...List
-                            .generate(
-                          socialMediaList
-                              .length,
-                          (index) =>
-                              ImageTextCell(
-                            img: socialMediaList[
-                                index],
+                        ...List.generate(
+                          socialMediaList.length,
+                          (index) => ImageTextCell(
+                            img: socialMediaList[index],
                             width: 40,
                             height: 40,
-                            borderRadius:
-                                20,
+                            borderRadius: 20,
                           ),
                         ),
                       ],
@@ -147,12 +114,10 @@ class PortfolioPage
                     flex: 2,
                   ),
                   CommonButton(
-                    img: controller
-                        .gmailLogo,
+                    img: controller.gmailLogo,
                     text: "HIRE ME",
                     height: 50,
-                    width: constraints
-                        .maxWidth,
+                    width: constraints.maxWidth,
                   )
                 ]),
           );
@@ -164,21 +129,13 @@ class PortfolioPage
   Widget buildRightPannel() {
     return SingleChildScrollView(
       child: Padding(
-        padding:
-            const EdgeInsets.all(50.0),
+        padding: const EdgeInsets.all(50.0),
         child: LayoutBuilder(
-          builder:
-              (BuildContext context,
-                  BoxConstraints
-                      constraints) {
+          builder: (BuildContext context, BoxConstraints constraints) {
             return Padding(
-              padding:
-                  const EdgeInsets.all(
-                      20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment
-                        .start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   buildIntroSection(),
                   30.verticalSpace,
@@ -190,8 +147,7 @@ class PortfolioPage
                   30.verticalSpace,
                   buildExperienceSection(),
                   30.verticalSpace,
-                  buildProjectSection(
-                      constraints),
+                  buildProjectSection(constraints),
                 ],
               ),
             );
@@ -202,14 +158,11 @@ class PortfolioPage
   }
 
   Widget buildIntroSection() {
-    final introductionList =
-        controller.introductionList[0];
+    final introductionList = controller.introductionList[0];
     return Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment:
-            MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ImageTextCell(
             text: "Introduction",
@@ -219,28 +172,24 @@ class PortfolioPage
           ),
           20.verticalSpace,
           Texts(
-            text: introductionList[
-                "title"]!,
+            text: introductionList["title"]!,
             fontSize: 60,
           ),
           10.verticalSpace,
           Texts(
-            text: introductionList[
-                "point1"]!,
+            text: introductionList["point1"]!,
             fontSize: 14,
             dot: true,
           ),
           10.verticalSpace,
           Texts(
-            text: introductionList[
-                "point2"]!,
+            text: introductionList["point2"]!,
             fontSize: 14,
             dot: true,
           ),
           10.verticalSpace,
           Texts(
-            text: introductionList[
-                "point3"]!,
+            text: introductionList["point3"]!,
             fontSize: 14,
             dot: true,
           ),
@@ -255,11 +204,9 @@ class PortfolioPage
 
   Widget buildAboutSection() {
     return Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         // mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment:
-            MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const ImageTextCell(
             text: "About",
@@ -282,19 +229,13 @@ class PortfolioPage
   }
 
   Widget buildTechnologiesSection() {
-    final List<String>
-        technologyNameList =
-        controller.technologyNameList;
-    final List<String>
-        technologyLinkList =
-        controller.technologyLinkList;
+    final List<String> technologyNameList = controller.technologyNameList;
+    final List<String> technologyLinkList = controller.technologyLinkList;
 
     return Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment:
-            MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const ImageTextCell(
             text: "Technologies",
@@ -308,22 +249,15 @@ class PortfolioPage
             spacing: 40,
             children: [
               ...List.generate(
-                technologyNameList
-                    .length,
-                (index) =>
-                    ImageTextCell(
-                  img:
-                      technologyLinkList[
-                          index],
-                  text:
-                      technologyNameList[
-                          index],
+                technologyNameList.length,
+                (index) => ImageTextCell(
+                  img: technologyLinkList[index],
+                  text: technologyNameList[index],
                   width: 150,
                   height: 200,
                   imgHeight: 100,
                   imgWidth: 100,
-                  spaceBetweenImgAndText:
-                      20,
+                  spaceBetweenImgAndText: 20,
                   fontSize: 20,
                   borderRadius: 20,
                 ),
@@ -334,14 +268,11 @@ class PortfolioPage
   }
 
   Widget buildEducationSection() {
-    final buildEduMapList =
-        controller.educationList;
+    final buildEduMapList = controller.educationList;
     return Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment:
-            MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const ImageTextCell(
             text: "Education",
@@ -360,27 +291,18 @@ class PortfolioPage
             (index) => Column(
               children: [
                 Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment
-                          .start,
-                  crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
-                  mainAxisSize:
-                      MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Column(
                       children: [
                         Container(
                           height: 10,
                           width: 10,
-                          decoration:
-                              BoxDecoration(
-                            color: Colors
-                                .green,
-                            borderRadius:
-                                BorderRadius.circular(
-                                    50),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(50),
                           ),
                         ),
                         const CommonDivider(),
@@ -389,47 +311,27 @@ class PortfolioPage
                     30.horizontalSpace,
                     Expanded(
                       child: Column(
-                        mainAxisAlignment:
-                            MainAxisAlignment
-                                .start,
-                        crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Texts(
-                            text: buildEduMapList[
-                                    index]
-                                [
-                                "degree"]!,
-                            fontSize:
-                                24,
+                            text: buildEduMapList[index]["degree"]!,
+                            fontSize: 24,
                           ),
                           3.verticalSpace,
                           Texts(
-                            text: buildEduMapList[
-                                    index]
-                                [
-                                "collage"]!,
-                            fontSize:
-                                14,
+                            text: buildEduMapList[index]["collage"]!,
+                            fontSize: 14,
                           ),
                           3.verticalSpace,
                           Texts(
-                            text: buildEduMapList[
-                                    index]
-                                [
-                                "fromTo"]!,
-                            fontSize:
-                                14,
+                            text: buildEduMapList[index]["fromTo"]!,
+                            fontSize: 14,
                           ),
                           3.verticalSpace,
                           Texts(
-                            text: buildEduMapList[
-                                    index]
-                                [
-                                "course"]!,
-                            fontSize:
-                                14,
+                            text: buildEduMapList[index]["course"]!,
+                            fontSize: 14,
                           ),
                           20.verticalSpace,
                         ],
@@ -444,14 +346,11 @@ class PortfolioPage
   }
 
   Widget buildExperienceSection() {
-    final buildExperienceMapList =
-        controller.experienceList;
+    final buildExperienceMapList = controller.experienceList;
     return Column(
-        crossAxisAlignment:
-            CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment:
-            MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const ImageTextCell(
             text: "Experience",
@@ -466,32 +365,22 @@ class PortfolioPage
           ),
           20.verticalSpace,
           ...List.generate(
-            buildExperienceMapList
-                .length,
+            buildExperienceMapList.length,
             (index) => Column(
               children: [
                 Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment
-                          .start,
-                  crossAxisAlignment:
-                      CrossAxisAlignment
-                          .start,
-                  mainAxisSize:
-                      MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     Column(
                       children: [
                         Container(
                           height: 10,
                           width: 10,
-                          decoration:
-                              BoxDecoration(
-                            color: Colors
-                                .green,
-                            borderRadius:
-                                BorderRadius.circular(
-                                    50),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(50),
                           ),
                         ),
                         const CommonDivider(),
@@ -500,65 +389,40 @@ class PortfolioPage
                     30.horizontalSpace,
                     Expanded(
                       child: Column(
-                        mainAxisAlignment:
-                            MainAxisAlignment
-                                .start,
-                        crossAxisAlignment:
-                            CrossAxisAlignment
-                                .start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Texts(
-                            text: buildExperienceMapList[
-                                    index]
-                                [
-                                "profile"]!,
-                            fontSize:
-                                24,
+                            text: buildExperienceMapList[index]["profile"]!,
+                            fontSize: 24,
                           ),
                           3.verticalSpace,
                           Texts(
-                            text: buildExperienceMapList[
-                                    index]
-                                [
-                                "company"]!,
-                            fontSize:
-                                14,
+                            text: buildExperienceMapList[index]["company"]!,
+                            fontSize: 14,
                           ),
                           3.verticalSpace,
                           Texts(
-                            text: buildExperienceMapList[
-                                    index]
-                                [
-                                "fromTo"]!,
-                            fontSize:
-                                14,
+                            text: buildExperienceMapList[index]["fromTo"]!,
+                            fontSize: 14,
                           ),
                           3.verticalSpace,
                           Texts(
-                            text: buildExperienceMapList[
-                                    index]
-                                [
-                                "responsibility1"]!,
-                            fontSize:
-                                14,
+                            text: buildExperienceMapList[index]
+                                ["responsibility1"]!,
+                            fontSize: 14,
                           ),
                           3.verticalSpace,
                           Texts(
-                            text: buildExperienceMapList[
-                                    index]
-                                [
-                                "responsibility2"]!,
-                            fontSize:
-                                14,
+                            text: buildExperienceMapList[index]
+                                ["responsibility2"]!,
+                            fontSize: 14,
                           ),
                           3.verticalSpace,
                           Texts(
-                            text: buildExperienceMapList[
-                                    index]
-                                [
-                                "responsibility3"]!,
-                            fontSize:
-                                14,
+                            text: buildExperienceMapList[index]
+                                ["responsibility3"]!,
+                            fontSize: 14,
                           ),
                           20.verticalSpace,
                         ],
@@ -572,13 +436,10 @@ class PortfolioPage
         ]);
   }
 
-  Widget buildProjectSection(
-      constraints) {
+  Widget buildProjectSection(constraints) {
     return Column(
-      mainAxisAlignment:
-          MainAxisAlignment.start,
-      crossAxisAlignment:
-          CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ImageTextCell(
           text: "Projects",
@@ -588,29 +449,22 @@ class PortfolioPage
         ),
         28.verticalSpace,
         Row(
-          mainAxisAlignment:
-              MainAxisAlignment.start,
-          crossAxisAlignment:
-              CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ImageTextCell(
               text: "Introduction",
-              width:
-                  constraints.maxWidth /
-                      2,
+              width: constraints.maxWidth / 2,
               height: 300,
               borderRadius: 20,
             ),
             20.horizontalSpace,
             Container(
-              width:
-                  constraints.maxWidth /
-                      2.5,
+              width: constraints.maxWidth / 2.5,
               child: Column(
                 children: [
                   const Texts(
-                    text:
-                        "I love exploring new things!",
+                    text: "I love exploring new things!",
                     fontSize: 30,
                     maxLine: 2,
                   ),

@@ -1,4 +1,4 @@
-# just_dm_ui
+# Linket
 
 A new Flutter project.
 
