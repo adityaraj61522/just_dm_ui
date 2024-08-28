@@ -422,7 +422,7 @@ class ChatPage extends StatelessWidget {
             Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: const Text("Privecy Policy")),
+                child: const Text("Privacy Policy")),
             const Divider()
           ],
         ),
