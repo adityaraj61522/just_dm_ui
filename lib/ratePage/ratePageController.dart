@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:Linket/responses/userResponse.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,10 +14,14 @@ class RatePageController extends GetxController {
   final apiResponse = "PASS".obs;
   final token = ''.obs;
   final TextEditingController textController = TextEditingController();
+  final userData = UserData.fromMap({}).obs;
   @override
   void onInit() {
     super.onInit();
     token.value = getFromLocalStorage('auth_token') ?? 'NO_TOKEN';
+    final userdata = getFromLocalStorage('user_data')!;
+    final user = json.decode(userdata);
+    userData.value = UserResponse.fromMap(user).userData;
   }
 
   String? getFromLocalStorage(String key) {

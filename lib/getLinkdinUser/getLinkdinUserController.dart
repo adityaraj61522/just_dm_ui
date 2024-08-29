@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:Linket/config.dart';
-import 'package:Linket/ratePage/ratePage.dart';
 import 'package:Linket/responses/userResponse.dart';
 import 'dart:html' as html;
 
@@ -35,14 +34,14 @@ class GetLinkdinUserController extends GetxController {
           var userResponse = UserResponse.fromMap(responseData);
           if (userResponse.code == 200 && userResponse.status == "SUCCESS") {
             await saveToLocalStorage('user_data', response.body);
-            if (userResponse.isNew) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RatePage()),
-              );
-            } else {
-              Navigator.pushNamed(context, '/chat');
-            }
+            // if (userResponse.isNew) {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(builder: (context) => RatePage()),
+            //   );
+            // } else {
+            Navigator.pushNamed(context, '/chat');
+            // }
           } else {
             apiResponse.value = "FAILED";
             print("Something is wrong!!!!!!!");

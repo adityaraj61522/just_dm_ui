@@ -127,11 +127,6 @@ class LinketScreen extends StatelessWidget {
     return Row(
       children: [
         const Expanded(child: SizedBox.shrink()),
-        // ImageTextCell(
-        //   img: Get.find<LandingPageController>().linketLogo,
-        //   height: constraints.maxWidth / 10,
-        //   width: constraints.maxWidth / 5,
-        // ),
         Text(
           "Linket.chat!",
           style: TextStyle(
@@ -188,7 +183,11 @@ class LinketScreen extends StatelessWidget {
       onPressed: () => Get.find<LandingPageController>().onLoginButtonClicked(),
       icon: Row(
         children: [
-          Icon(Icons.login_sharp),
+          ImageTextCell(
+            img: Get.find<LandingPageController>().linkdinLogo,
+            height: 35,
+            width: 35,
+          ),
           10.horizontalSpace,
         ],
       ),

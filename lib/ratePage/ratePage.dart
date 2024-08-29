@@ -58,9 +58,9 @@ class RatePage extends StatelessWidget {
   }
 
   Widget buildGreeting() {
-    return const Text(
-      'Hi Aviral, Let’s Linket!',
-      style: TextStyle(
+    return Text(
+      'Hi ${controller.userData.value.name}, Let’s Linket!',
+      style: const TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
         color: Colors.black87,

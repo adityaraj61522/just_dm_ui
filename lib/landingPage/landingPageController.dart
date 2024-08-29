@@ -11,7 +11,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:html' as html;
 
 class LandingPageController extends GetxController {
-  final String linketLogo = "https://imgur.com/a/tkIVVeF";
+  final String linketLogo = "https://i.imgur.com/yE3gdRw.jpg";
+  final String linkdinLogo =
+      "https://pub-27ef948460e04665a808b1803176deb9.r2.dev/linkedin.1024x1024.png";
 
   final List<String> technologyNameList = [];
   final List<String> technologyLinkList = [];

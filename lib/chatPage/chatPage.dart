@@ -19,7 +19,7 @@ class ChatPage extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color.fromARGB(255, 0, 128, 128),
+          backgroundColor: const Color.fromARGB(255, 0, 128, 128),
           toolbarHeight: 60,
           centerTitle: true,
           leadingWidth: 150,
@@ -47,7 +47,7 @@ class ChatPage extends StatelessWidget {
           ),
           title: Row(
             children: [
-              Spacer(),
+              const Spacer(),
               const Text(
                 'Linket.chat!',
                 style: TextStyle(
@@ -55,17 +55,17 @@ class ChatPage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 25),
               ),
-              Spacer(),
+              const Spacer(),
               InkWell(
                 onTap: () => controller.logout(context),
                 child: Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.logout,
                       color: Colors.white,
                     ),
                     10.horizontalSpace,
-                    Text(
+                    const Text(
                       "Logout",
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
@@ -101,7 +101,7 @@ class ChatPage extends StatelessWidget {
         if (constraints.maxWidth > 950) {
           return Container(
               color: const Color.fromARGB(255, 0, 128, 128),
-              child: ChatScreen(constraints: constraints));
+              child: chatScreen(constraints: constraints));
         } else {
           return Container(
             child: buildMobileContent(),
@@ -115,7 +115,7 @@ class ChatPage extends StatelessWidget {
     return Container();
   }
 
-  Widget ChatScreen({required BoxConstraints constraints}) {
+  Widget chatScreen({required BoxConstraints constraints}) {
     return Row(
       children: [
         Expanded(
@@ -133,7 +133,7 @@ class ChatPage extends StatelessWidget {
                   if (controller.selectedLeftPage.value == "PROFILE") {
                     return buildProfilePage(constraints: constraints);
                   }
-                  return (SizedBox.shrink());
+                  return (const SizedBox.shrink());
                 },
               ),
               Positioned(
@@ -148,7 +148,8 @@ class ChatPage extends StatelessWidget {
                           border: Border.all(
                             color: Colors.grey,
                           ),
-                          borderRadius: BorderRadius.all(Radius.circular(50))),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(50))),
                       child: Row(
                         children: [
                           Expanded(
@@ -163,7 +164,7 @@ class ChatPage extends StatelessWidget {
                                         Radius.circular(50)),
                                     color: controller.selectedLeftPage.value ==
                                             "CHAT"
-                                        ? Color.fromARGB(255, 0, 128, 128)
+                                        ? const Color.fromARGB(255, 0, 128, 128)
                                         : Colors.white),
                                 child: Center(
                                     child: Icon(
@@ -195,7 +196,7 @@ class ChatPage extends StatelessWidget {
                                         Radius.circular(50)),
                                     color: controller.selectedLeftPage.value ==
                                             "PROFILE"
-                                        ? Color.fromARGB(255, 0, 128, 128)
+                                        ? const Color.fromARGB(255, 0, 128, 128)
                                         : Colors.white),
                                 child: Center(
                                     child: Icon(
@@ -269,7 +270,7 @@ class ChatPage extends StatelessWidget {
                 Center(
                   child: TextButton(
                     onPressed: () => controller.payToUnlockChat(),
-                    child: Text('Pay Now'),
+                    child: const Text('Pay Now'),
                   ),
                 )
               ],
@@ -367,7 +368,7 @@ class ChatPage extends StatelessWidget {
             onPressed: () => onSubmit.call(),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 15),
-              backgroundColor: Color.fromARGB(255, 0, 128, 128),
+              backgroundColor: const Color.fromARGB(255, 0, 128, 128),
             ),
             child: Text(
               buttonLabel,
@@ -381,7 +382,7 @@ class ChatPage extends StatelessWidget {
 
   Widget buildProfilePage({required BoxConstraints constraints}) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(50),
         ),
@@ -409,11 +410,11 @@ class ChatPage extends StatelessWidget {
             ),
             20.verticalSpace,
             const Divider(),
-            Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: const Text("About")),
-            const Divider(),
+            // Container(
+            //     padding:
+            //         const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+            //     child: const Text("About")),
+            // const Divider(),
             Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
@@ -431,89 +432,78 @@ class ChatPage extends StatelessWidget {
   }
 
   Widget buildChatScreen({required BoxConstraints constraints}) {
-    return Column(
+    return Stack(
       children: <Widget>[
-        buildChatingWithTile(),
-        const CommonDivider(direction: "H"),
-        SizedBox(
-          height: constraints.maxHeight - 103,
-          width: constraints.maxWidth,
-          child: Obx(() {
-            // Access the observable list directly
-            final messages = controller.chatMessageList;
+        Obx(() {
+          // Access the observable list directly
+          final messages = controller.chatMessageList;
 
-            return Container(
+          return Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(topRight: Radius.circular(50)),
               color: Colors.white,
-              padding: const EdgeInsets.all(20),
-              child: ListView.builder(
-                controller: controller.scrollController,
-                shrinkWrap: true,
-                itemCount: messages.length, // Use length of observable list
-                itemBuilder: (context, index) {
-                  return chatMessageTile(
-                      chat: messages[index], context: context);
-                },
-              ),
-            );
-          }),
-        ),
-        Container(
-          height: 42,
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          color: Colors.white,
-          child: ChatInputField(
-            onSubmitted: (text) => controller.sendMessage(),
-            controller: controller.textController,
-          ),
-        ),
-        Container(
-          height: 10,
-          color: Colors.white,
-        ),
+            ),
+            padding:
+                const EdgeInsets.only(top: 20, bottom: 60, left: 20, right: 20),
+            child: ListView.builder(
+              controller: controller.scrollController,
+              shrinkWrap: true,
+              itemCount: messages.length, // Use length of observable list
+              itemBuilder: (context, index) {
+                return chatMessageTile(chat: messages[index], context: context);
+              },
+            ),
+          );
+        }),
+        buildChatingWithTile(),
+        buildInputBox(),
       ],
     );
   }
 
   Widget buildChatingWithTile() {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topRight: Radius.circular(50),
+    return IntrinsicWidth(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.withOpacity(.5)),
+          borderRadius: BorderRadius.circular(50),
+          color: Colors.white,
         ),
-        color: Colors.white,
-      ),
-      height: 50,
-      padding: const EdgeInsets.all(10),
-      child: Row(
-        children: [
-          CircleAvatar(child: Text(controller.selectedChatRoom.value.name[0])),
-          10.horizontalSpace,
-          Text(
-            controller.selectedChatRoom.value.name,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          )
-        ],
+        height: 50,
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          children: [
+            CircleAvatar(
+                child: Text(controller.selectedChatRoom.value.name[0])),
+            10.horizontalSpace,
+            Text(
+              controller.selectedChatRoom.value.name,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildChatUserTile({required ChatListUserData chatUser}) {
-    final _isHovered = false.obs;
+    final isHovered = false.obs;
 
-    void _onHover(bool isHovered) {
-      _isHovered.value = isHovered;
+    void onHover(bool isHover) {
+      isHovered.value = isHover;
     }
 
     return Obx(
       () {
         return MouseRegion(
           cursor: SystemMouseCursors.click,
-          onEnter: (_) => _onHover(true),
-          onExit: (_) => _onHover(false),
+          onEnter: (_) => onHover(true),
+          onExit: (_) => onHover(false),
           child: GestureDetector(
             onTap: () => controller.onChatTileClicked(chatUser: chatUser),
             child: Container(
-              color: _isHovered.value
+              color: isHovered.value
                   ? const Color.fromARGB(255, 0, 128, 128).withOpacity(.10)
                   : Colors.transparent,
               child: ListTile(
@@ -579,30 +569,44 @@ class ChatPage extends StatelessWidget {
               width: 1.0, // Border width
             ),
           ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width *
-                      0.5, // Limit width to 50% of the screen
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (chat.chatImg.isNotEmpty) ...[
+                10.verticalSpace,
+                ImageTextCell(
+                  img: chat.chatImg,
+                  height: 200,
+                  width: 200,
                 ),
-                child: Text(
-                  chat.chatText,
-                  style: TextStyle(
-                      color: chat.sent ? Colors.white : Colors.blueGrey,
-                      overflow: TextOverflow.visible),
-                  maxLines: null,
-                ),
-              ),
-              20.horizontalSpace,
-              Text(
-                chat.chatDate,
-                style: TextStyle(
-                    fontSize: 10,
-                    color: chat.sent
-                        ? const Color.fromARGB(255, 219, 213, 213)
-                        : const Color.fromARGB(255, 100, 100, 100)),
+              ],
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Container(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width *
+                          0.5, // Limit width to 50% of the screen
+                    ),
+                    child: Text(
+                      chat.chatText,
+                      style: TextStyle(
+                          color: chat.sent ? Colors.white : Colors.blueGrey,
+                          overflow: TextOverflow.visible),
+                      maxLines: null,
+                    ),
+                  ),
+                  20.horizontalSpace,
+                  Text(
+                    chat.chatDate,
+                    style: TextStyle(
+                        fontSize: 10,
+                        color: chat.sent
+                            ? const Color.fromARGB(255, 219, 213, 213)
+                            : const Color.fromARGB(255, 100, 100, 100)),
+                  ),
+                ],
               ),
             ],
           ),
@@ -610,46 +614,82 @@ class ChatPage extends StatelessWidget {
       ],
     );
   }
-}
 
-class ChatInputField extends StatelessWidget {
-  final TextEditingController controller;
-  final ValueChanged<String> onSubmitted;
-
-  const ChatInputField(
-      {super.key, required this.onSubmitted, required this.controller});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(50.0),
-        border: Border.all(
-          color: const Color.fromARGB(255, 216, 213, 213), // Border color
-          width: 1.0, // Border width
-        ),
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.attach_file),
-            onPressed: () {},
-          ),
-          Expanded(
-            child: TextField(
-              controller: controller,
-              onSubmitted: onSubmitted,
-              decoration:
-                  const InputDecoration.collapsed(hintText: "Send a message"),
+  Widget buildInputBox() {
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: IntrinsicHeight(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(50.0),
+            border: Border.all(
+              color: const Color.fromARGB(255, 216, 213, 213), // Border color
+              width: 1.0, // Border width
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.send),
-            onPressed: () => onSubmitted(controller.text),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+          margin: const EdgeInsets.only(
+            left: 10,
+            right: 10,
+            bottom: 10,
           ),
-        ],
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Obx(
+                () {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: controller.imageUploadUrl.value.isNotEmpty
+                          ? const Color.fromARGB(255, 0, 128, 128)
+                          : Colors.white,
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.attach_file),
+                          onPressed: () => controller.uploadImageWeb(),
+                          padding: const EdgeInsets.all(0),
+                          iconSize: 20,
+                          constraints: BoxConstraints.tight(const Size(30, 30)),
+                          color: controller.imageUploadUrl.value.isNotEmpty
+                              ? Colors.white
+                              : Colors.grey,
+                        ),
+                        if (controller.imageUploadUrl.value.isNotEmpty)
+                          const Text(
+                            "1",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              10.horizontalSpace,
+              Expanded(
+                child: TextField(
+                  controller: controller.textController,
+                  maxLines: 4,
+                  minLines: 1,
+                  onSubmitted: (text) => controller.sendMessage(),
+                  decoration: const InputDecoration.collapsed(
+                      hintText: "Send a message"),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.send),
+                onPressed: () => controller.sendMessage(),
+                padding: const EdgeInsets.all(0),
+                iconSize: 20,
+                constraints: BoxConstraints.tight(const Size(30, 30)),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
