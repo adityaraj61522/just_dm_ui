@@ -107,6 +107,7 @@ class ImageTextCell extends StatelessWidget {
     this.borderRadius = 0,
     this.onTap,
     this.trimImgBorder = false,
+    this.showBorder = true,
   });
   final String? img;
   final double? height;
@@ -124,6 +125,7 @@ class ImageTextCell extends StatelessWidget {
   final double borderRadius;
   final VoidCallback? onTap;
   final bool trimImgBorder;
+  final bool showBorder;
 
   @override
   Widget build(Object context) {
@@ -136,7 +138,7 @@ class ImageTextCell extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey.shade600,
-            width: 2.0,
+            width: showBorder ? 2.0 : 0,
             style: BorderStyle.solid,
           ),
           borderRadius: BorderRadius.circular(borderRadius),

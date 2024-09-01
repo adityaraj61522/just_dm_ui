@@ -399,8 +399,22 @@ class ChatPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CircleAvatar(
-                    radius: 50, child: Text(controller.userData.value.name[0])),
+                if (controller.userData.value.picture.isNotEmpty) ...{
+                  ImageTextCell(
+                    borderRadius: 50,
+                    img: controller.userData.value.picture,
+                    imgHeight: 100,
+                    imgWidth: 100,
+                    height: 100,
+                    width: 100,
+                    trimImgBorder: true,
+                    showBorder: false,
+                  ),
+                } else ...{
+                  CircleAvatar(
+                      radius: 50,
+                      child: Text(controller.userData.value.name[0])),
+                },
                 10.verticalSpace,
                 Text(
                   controller.userData.value.name,
@@ -482,8 +496,21 @@ class ChatPage extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Row(
           children: [
-            CircleAvatar(
-                child: Text(controller.selectedChatRoom.value.name[0])),
+            if (controller.selectedChatRoom.value.picture.isNotEmpty) ...{
+              ImageTextCell(
+                borderRadius: 50,
+                img: controller.selectedChatRoom.value.picture,
+                imgHeight: 28,
+                imgWidth: 28,
+                height: 28,
+                width: 28,
+                trimImgBorder: true,
+                showBorder: false,
+              ),
+            } else ...{
+              CircleAvatar(
+                  child: Text(controller.selectedChatRoom.value.name[0])),
+            },
             10.horizontalSpace,
             Text(
               controller.selectedChatRoom.value.name,
@@ -502,6 +529,18 @@ class ChatPage extends StatelessWidget {
       isHovered.value = isHover;
     }
 
+    final userImg = chatUser.picture.isNotEmpty
+        ? ImageTextCell(
+            borderRadius: 50,
+            img: chatUser.picture,
+            imgHeight: 48,
+            imgWidth: 48,
+            height: 48,
+            width: 48,
+            trimImgBorder: true,
+            showBorder: false,
+          )
+        : CircleAvatar(child: Text(chatUser.name[0]));
     return Obx(
       () {
         return MouseRegion(
@@ -516,7 +555,7 @@ class ChatPage extends StatelessWidget {
                   : Colors.transparent,
               child: ListTile(
                 onTap: () => controller.onChatTileClicked(chatUser: chatUser),
-                leading: CircleAvatar(child: Text(chatUser.name[0])),
+                leading: userImg,
                 title: Text(chatUser.name),
                 subtitle: Text(
                   chatUser.chatText,

@@ -122,7 +122,7 @@ class ChatPageController extends GetxController {
       receiverId: selectedChatRoom.value.userId,
       chatText: textController.text,
       chatImg: imageUploadUrl.value,
-      chatDate: DateTime.now().toString(),
+      chatDate: DateFormat('dd MMM yy hh:mm a').format(DateTime.now()),
       sent: true,
     );
 

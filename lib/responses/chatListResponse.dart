@@ -31,6 +31,7 @@ class ChatListUserData {
   final String chatDate;
   final int unreadCount;
   final int rate;
+  final String picture;
 
   ChatListUserData({
     required this.roomId,
@@ -43,6 +44,7 @@ class ChatListUserData {
     required this.chatDate,
     required this.unreadCount,
     required this.rate,
+    required this.picture,
   });
 
   factory ChatListUserData.fromMap(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class ChatListUserData {
       chatDate: json['chatDate'] ?? '',
       unreadCount: json['unreadCount'] ?? 1,
       rate: json['rate'] ?? 0,
+      picture: json['picture'] ?? '',
     );
   }
 }
