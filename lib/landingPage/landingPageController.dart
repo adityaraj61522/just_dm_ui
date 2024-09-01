@@ -42,7 +42,7 @@ class LandingPageController extends GetxController {
           var loginResponse = LoginResponse.fromMap(responseData);
           if (loginResponse.code == 200 && loginResponse.status == "SUCCESS") {
             print(loginResponse.location);
-            _launchURL(Uri.parse(loginResponse.location));
+            launchURL(Uri.parse(loginResponse.location));
           } else {
             apiResponse.value = "FAILED";
             print("Something is wrong!!!!!!!");
@@ -62,7 +62,7 @@ class LandingPageController extends GetxController {
     }
   }
 
-  void _launchURL(Uri url) async {
+  void launchURL(Uri url) async {
     try {
       if (await canLaunchUrl(url)) {
         await launchUrl(url);

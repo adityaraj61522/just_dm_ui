@@ -415,15 +415,23 @@ class ChatPage extends StatelessWidget {
             //         const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
             //     child: const Text("About")),
             // const Divider(),
-            Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: const Text("Term of Service")),
+            InkWell(
+              onTap: () =>
+                  controller.launchURL("https://linket.chat/terms.html"),
+              child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  child: const Text("Terms And Condition")),
+            ),
             const Divider(),
-            Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-                child: const Text("Privacy Policy")),
+            InkWell(
+              onTap: () =>
+                  controller.launchURL("https://linket.chat/privacy.html"),
+              child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  child: const Text("Privacy Policy")),
+            ),
             const Divider()
           ],
         ),

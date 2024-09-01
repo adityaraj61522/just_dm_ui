@@ -213,12 +213,16 @@ class LinketScreen extends StatelessWidget {
   Widget buildTermsAndCondition() {
     return Row(
       children: [
-        Text(
-          "Terms And Condition",
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.5),
-            fontSize: 18,
-            fontFamily: 'Poppins',
+        InkWell(
+          onTap: () =>
+              controller.launchURL(Uri.parse("https://linket.chat/terms.html")),
+          child: Text(
+            "Terms And Condition",
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.5),
+              fontSize: 18,
+              fontFamily: 'Poppins',
+            ),
           ),
         ),
         10.horizontalSpace,
@@ -231,12 +235,16 @@ class LinketScreen extends StatelessWidget {
           ),
         ),
         10.horizontalSpace,
-        Text(
-          "Privacy Policy",
-          style: TextStyle(
-            color: Colors.white.withOpacity(0.5),
-            fontSize: 18,
-            fontFamily: 'Poppins',
+        InkWell(
+          onTap: () => controller
+              .launchURL(Uri.parse("https://linket.chat/privacy.html")),
+          child: Text(
+            "Privacy Policy",
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.5),
+              fontSize: 18,
+              fontFamily: 'Poppins',
+            ),
           ),
         ),
       ],

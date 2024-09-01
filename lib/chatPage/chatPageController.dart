@@ -15,6 +15,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:Linket/config.dart';
 import 'dart:html' as html;
 
+import 'package:url_launcher/url_launcher.dart';
+
 class ChatPageController extends GetxController {
   final apiResponse = "LOADING".obs;
   final apiScreenResponse = "".obs;
@@ -481,5 +483,17 @@ class ChatPageController extends GetxController {
   String sanitizeFileName(String fileName) {
     // Replace all special characters and spaces with an underscore or any desired character.
     return fileName.replaceAll(RegExp(r'[^\w\s-]'), '_').replaceAll(' ', '_');
+  }
+
+  void launchURL(String url) async {
+    try {
+      if (await canLaunchUrl(Uri.parse(url))) {
+        await launchUrl(Uri.parse(url));
+      } else {
+        throw 'Could not launch $url';
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }
