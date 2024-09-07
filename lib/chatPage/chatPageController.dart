@@ -179,6 +179,7 @@ class ChatPageController extends GetxController {
 
   fetchChatByRoom() async {
     apiScreenResponse.value = "LOADING";
+    chatMessageList.value = [];
     try {
       final Map<String, String> headers = {
         'Content-Type': 'application/json',
