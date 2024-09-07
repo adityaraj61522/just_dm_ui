@@ -1,6 +1,6 @@
 # Linket
 
-A new Flutter project.
+Network, connect, done. That's how we do it with Linket.chat.
 
 ## Getting Started
 
