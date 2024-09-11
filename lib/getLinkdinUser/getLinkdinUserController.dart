@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:Linket/chatPage/chatPage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -40,8 +41,12 @@ class GetLinkdinUserController extends GetxController {
             //     MaterialPageRoute(builder: (context) => RatePage()),
             //   );
             // } else {
-            Navigator.pushNamed(context, '/chat');
+            // Navigator.pushNamed(context, '/chat');
             // }
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChatPage()),
+            );
           } else {
             apiResponse.value = "FAILED";
             print("Something is wrong!!!!!!!");

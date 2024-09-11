@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:Linket/chatPage/chatPageController.dart';
 import 'package:Linket/common_widgets/commonWidgets.dart';
@@ -11,86 +14,79 @@ class ChatPage extends StatelessWidget {
   ChatPage({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Linket.chat!',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 0, 128, 128),
-          toolbarHeight: 60,
-          centerTitle: true,
-          leadingWidth: 150,
-          leading: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 0, 128, 128),
+        toolbarHeight: 60,
+        centerTitle: true,
+        leadingWidth: 150,
+        leading: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+          ),
+          child: InkWell(
+            onTap: () => controller.copyLink(context),
+            child: Row(
+              children: [
+                10.horizontalSpace,
+                const Icon(Icons.share, color: Colors.white),
+                10.horizontalSpace,
+                const Text(
+                  "Share Link",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                  ),
+                ),
+              ],
             ),
-            child: InkWell(
-              onTap: () => controller.copyLink(context),
+          ),
+        ),
+        title: Row(
+          children: [
+            const Spacer(),
+            const Text(
+              'Linket.chat!',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25),
+            ),
+            const Spacer(),
+            InkWell(
+              onTap: () => controller.logout(context),
               child: Row(
                 children: [
-                  10.horizontalSpace,
-                  const Icon(Icons.share, color: Colors.white),
+                  const Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
                   10.horizontalSpace,
                   const Text(
-                    "Share Link",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
+                    "Logout",
+                    style: TextStyle(color: Colors.white, fontSize: 15),
                   ),
+                  10.horizontalSpace,
                 ],
               ),
-            ),
-          ),
-          title: Row(
-            children: [
-              const Spacer(),
-              const Text(
-                'Linket.chat!',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 25),
-              ),
-              const Spacer(),
-              InkWell(
-                onTap: () => controller.logout(context),
-                child: Row(
-                  children: [
-                    const Icon(
-                      Icons.logout,
-                      color: Colors.white,
-                    ),
-                    10.horizontalSpace,
-                    const Text(
-                      "Logout",
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    10.horizontalSpace,
-                  ],
-                ),
-              )
-            ],
-          ),
+            )
+          ],
         ),
-        body: Obx(
-          () {
-            if (controller.apiResponse.value == "LOADING") {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (controller.apiResponse.value == "PASS") {
-              return buildContent();
-            } else {
-              return const Center(
-                child: Text('Something went wrong. Please try again.'),
-              );
-            }
-          },
-        ),
+      ),
+      body: Obx(
+        () {
+          if (controller.apiResponse.value == "LOADING") {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (controller.apiResponse.value == "PASS") {
+            return buildContent();
+          } else {
+            return const Center(
+              child: Text('Something went wrong. Please try again.'),
+            );
+          }
+        },
       ),
     );
   }
@@ -104,120 +100,21 @@ class ChatPage extends StatelessWidget {
               child: chatScreen(constraints: constraints));
         } else {
           return Container(
-            child: buildMobileContent(),
+            child: buildMobileContent(constraints: constraints),
           );
         }
       },
     );
   }
 
-  Widget buildMobileContent() {
-    return Container();
+  Widget buildMobileContent({required BoxConstraints constraints}) {
+    return buildChatTilePage(constraints: constraints, isMobile: true);
   }
 
   Widget chatScreen({required BoxConstraints constraints}) {
     return Row(
       children: [
-        Expanded(
-          flex: 1,
-          child: Stack(
-            children: [
-              Obx(
-                () {
-                  if (controller.selectedLeftPage.value == "CHAT") {
-                    return buildChatList(constraints: constraints);
-                  }
-                  if (controller.selectedLeftPage.value == "WALLET") {
-                    return buildWalletPage(constraints: constraints);
-                  }
-                  if (controller.selectedLeftPage.value == "PROFILE") {
-                    return buildProfilePage(constraints: constraints);
-                  }
-                  return (const SizedBox.shrink());
-                },
-              ),
-              Positioned(
-                top: constraints.maxHeight - 70,
-                left: 70,
-                right: 70,
-                bottom: 30,
-                child: Obx(
-                  () {
-                    return Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                          ),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(50))),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () =>
-                                  controller.onLeftPageChange(page: "CHAT"),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(50)),
-                                    color: controller.selectedLeftPage.value ==
-                                            "CHAT"
-                                        ? const Color.fromARGB(255, 0, 128, 128)
-                                        : Colors.white),
-                                child: Center(
-                                    child: Icon(
-                                  Icons.chat,
-                                  color: controller.selectedLeftPage.value ==
-                                          "CHAT"
-                                      ? Colors.white
-                                      : Colors.black,
-                                )),
-                              ),
-                            ),
-                          ),
-                          // Expanded(
-                          //   child: InkWell(
-                          //     onTap: () =>
-                          //         controller.onLeftPageChange(page: "WALLET"),
-                          //     child: Center(child: Text("Wallet")),
-                          //   ),
-                          // ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () =>
-                                  controller.onLeftPageChange(page: "PROFILE"),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(50)),
-                                    color: controller.selectedLeftPage.value ==
-                                            "PROFILE"
-                                        ? const Color.fromARGB(255, 0, 128, 128)
-                                        : Colors.white),
-                                child: Center(
-                                    child: Icon(
-                                  Icons.person_outlined,
-                                  color: controller.selectedLeftPage.value ==
-                                          "PROFILE"
-                                      ? Colors.white
-                                      : Colors.black,
-                                )),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
+        buildChatTilePage(constraints: constraints, isMobile: false),
         const VerticalDivider(width: 1),
         Expanded(
           flex: 3,
@@ -250,6 +147,107 @@ class ChatPage extends StatelessWidget {
           }),
         ),
       ],
+    );
+  }
+
+  Widget buildChatTilePage(
+      {required BoxConstraints constraints, required bool isMobile}) {
+    return Expanded(
+      flex: 1,
+      child: Stack(
+        children: [
+          Obx(
+            () {
+              if (controller.selectedLeftPage.value == "CHAT") {
+                return buildChatList(constraints: constraints);
+              }
+              if (controller.selectedLeftPage.value == "WALLET") {
+                return buildWalletPage(constraints: constraints);
+              }
+              if (controller.selectedLeftPage.value == "PROFILE") {
+                return buildProfilePage(constraints: constraints);
+              }
+              return (const SizedBox.shrink());
+            },
+          ),
+          Positioned(
+            top: constraints.maxHeight - 70,
+            left: 70,
+            right: 70,
+            bottom: 30,
+            child: Obx(
+              () {
+                return Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                      ),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(50))),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () =>
+                              controller.onLeftPageChange(page: "CHAT"),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(50)),
+                                color:
+                                    controller.selectedLeftPage.value == "CHAT"
+                                        ? const Color.fromARGB(255, 0, 128, 128)
+                                        : Colors.white),
+                            child: Center(
+                                child: Icon(
+                              Icons.chat,
+                              color: controller.selectedLeftPage.value == "CHAT"
+                                  ? Colors.white
+                                  : Colors.black,
+                            )),
+                          ),
+                        ),
+                      ),
+                      // Expanded(
+                      //   child: InkWell(
+                      //     onTap: () =>
+                      //         controller.onLeftPageChange(page: "WALLET"),
+                      //     child: Center(child: Text("Wallet")),
+                      //   ),
+                      // ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () =>
+                              controller.onLeftPageChange(page: "PROFILE"),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(50)),
+                                color: controller.selectedLeftPage.value ==
+                                        "PROFILE"
+                                    ? const Color.fromARGB(255, 0, 128, 128)
+                                    : Colors.white),
+                            child: Center(
+                                child: Icon(
+                              Icons.person_outlined,
+                              color:
+                                  controller.selectedLeftPage.value == "PROFILE"
+                                      ? Colors.white
+                                      : Colors.black,
+                            )),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -465,6 +463,7 @@ class ChatPage extends StatelessWidget {
               borderRadius: BorderRadius.only(topRight: Radius.circular(50)),
               color: Colors.white,
             ),
+            height: constraints.maxHeight,
             padding:
                 const EdgeInsets.only(top: 20, bottom: 60, left: 20, right: 20),
             child: ListView.builder(

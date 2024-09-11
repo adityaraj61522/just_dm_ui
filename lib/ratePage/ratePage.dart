@@ -7,12 +7,8 @@ class RatePage extends StatelessWidget {
   final RatePageController controller = Get.put(RatePageController());
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Linket!',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: LayoutBuilder(
+    return Scaffold(
+      body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           if (constraints.maxWidth > 950) {
             return buildScreen(context, constraints: constraints);

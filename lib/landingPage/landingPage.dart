@@ -47,7 +47,7 @@ class _LandingPageState extends State<LandingPage> {
               if (constraints.maxWidth > 950) {
                 return LinketScreen(constraints: constraints);
               } else {
-                return buildMobileContent();
+                return buildMobileContent(constraints);
               }
             },
           );
@@ -61,8 +61,8 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget buildMobileContent() {
-    return const SizedBox.shrink();
+  Widget buildMobileContent(BoxConstraints constraints) {
+    return LinketMobileScreen(constraints: constraints);
   }
 }
 
@@ -187,6 +187,7 @@ class LinketScreen extends StatelessWidget {
             img: Get.find<LandingPageController>().linkdinLogo,
             height: 35,
             width: 35,
+            showBorder: false,
           ),
           10.horizontalSpace,
         ],
@@ -243,6 +244,189 @@ class LinketScreen extends StatelessWidget {
             style: TextStyle(
               color: Colors.white.withOpacity(0.5),
               fontSize: 18,
+              fontFamily: 'Poppins',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class LinketMobileScreen extends StatelessWidget {
+  LinketMobileScreen({
+    super.key,
+    required this.constraints,
+  });
+
+  final BoxConstraints constraints;
+  final controller = Get.put(LandingPageController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: constraints.maxWidth,
+      decoration: BoxDecoration(
+          color: Color.fromARGB(255, 0, 128, 128).withOpacity(0.75)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildHeader(),
+                  const Spacer(),
+                  IntrinsicHeight(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        buildTitle(),
+                        20.verticalSpace,
+                        buildSubtitle(),
+                        buildDescription(),
+                        30.verticalSpace,
+                        buildLoginButton(),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  buildTermsAndCondition(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildHeader() {
+    return const Row(
+      children: [
+        Expanded(child: SizedBox.shrink()),
+        Text(
+          "Linket.chat!",
+          style: TextStyle(
+              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+        )
+      ],
+    );
+  }
+
+  Widget buildTitle() {
+    return Text(
+      'Why bother with contact info? Just share your Linket.chat link!',
+      style: TextStyle(
+        color: Colors.white.withOpacity(0.9),
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+        fontFamily: 'Poppins',
+      ),
+    );
+  }
+
+  Widget buildSubtitle() {
+    return Text(
+      'Say goodbye to awkward number swaps and endless connection requests! ',
+      style: TextStyle(
+        color: Colors.white.withOpacity(0.5),
+        fontSize: 15,
+      ),
+    );
+  }
+
+  Widget buildDescription() {
+    return Text(
+      'Just drop your Linket.chat Messaging Link and boom—you\'re ready to network like a pro.',
+      style: TextStyle(
+        color: Colors.white.withOpacity(0.5),
+        fontSize: 15,
+      ),
+    );
+  }
+
+  Widget buildDetails() {
+    return const Text(
+      'Linket is designed to help you connect new people, whether for personal or professional growth. Enjoy the added bonus of rewards with every new connection you make!',
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 15,
+      ),
+    );
+  }
+
+  Widget buildLoginButton() {
+    return ElevatedButton.icon(
+      onPressed: () => Get.find<LandingPageController>().onLoginButtonClicked(),
+      icon: Row(
+        children: [
+          ImageTextCell(
+            img: Get.find<LandingPageController>().linkdinLogo,
+            height: 20,
+            width: 20,
+            showBorder: false,
+          ),
+          10.horizontalSpace,
+        ],
+      ),
+      label: Text(
+        'Continue with LinkedIn',
+        style: TextStyle(
+          fontFamily: 'Poppins',
+        ),
+      ),
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 12),
+        fixedSize: Size(230, 35),
+        backgroundColor: Color.fromARGB(255, 0, 128, 128).withOpacity(0.99),
+        foregroundColor: Colors.white,
+        textStyle: const TextStyle(
+          fontSize: 15,
+          fontFamily: 'Poppins',
+        ),
+      ),
+    );
+  }
+
+  Widget buildTermsAndCondition() {
+    return Row(
+      children: [
+        InkWell(
+          onTap: () =>
+              controller.launchURL(Uri.parse("https://linket.chat/terms.html")),
+          child: Text(
+            "Terms And Condition",
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.5),
+              fontSize: 13,
+              fontFamily: 'Poppins',
+            ),
+          ),
+        ),
+        10.horizontalSpace,
+        Text(
+          "|",
+          style: TextStyle(
+            color: Colors.white.withOpacity(0.5),
+            fontSize: 13,
+            fontFamily: 'Poppins',
+          ),
+        ),
+        10.horizontalSpace,
+        InkWell(
+          onTap: () => controller
+              .launchURL(Uri.parse("https://linket.chat/privacy.html")),
+          child: Text(
+            "Privacy Policy",
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.5),
+              fontSize: 13,
               fontFamily: 'Poppins',
             ),
           ),
