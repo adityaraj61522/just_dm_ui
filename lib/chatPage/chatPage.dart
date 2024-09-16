@@ -14,6 +14,18 @@ class ChatPage extends StatelessWidget {
   ChatPage({super.key});
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth > 950) {
+          return buildContent(context, constraints);
+        } else {
+          return Container(child: buildMobile(context, constraints));
+        }
+      },
+    );
+  }
+
+  Widget buildContent(BuildContext context, BoxConstraints constraints) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 0, 128, 128),
@@ -80,7 +92,9 @@ class ChatPage extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (controller.apiResponse.value == "PASS") {
-            return buildContent();
+            return Container(
+                color: const Color.fromARGB(255, 0, 128, 128),
+                child: chatScreen(constraints: constraints));
           } else {
             return const Center(
               child: Text('Something went wrong. Please try again.'),
@@ -91,19 +105,76 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Widget buildContent() {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        if (constraints.maxWidth > 950) {
-          return Container(
-              color: const Color.fromARGB(255, 0, 128, 128),
-              child: chatScreen(constraints: constraints));
-        } else {
-          return Container(
-            child: buildMobileContent(constraints: constraints),
-          );
-        }
-      },
+  Widget buildMobile(BuildContext context, BoxConstraints constraints) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 0, 128, 128),
+        toolbarHeight: 60,
+        centerTitle: false,
+        leadingWidth: constraints.maxWidth / 2 - 80,
+        leading: Obx(
+          () {
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+              ),
+              child: controller.selectedLeftPage.value != "CHAT_SCREEN"
+                  ? InkWell(
+                      onTap: () => controller.copyLink(context),
+                      child: Row(
+                        children: [
+                          10.horizontalSpace,
+                          const Icon(Icons.share, color: Colors.white),
+                        ],
+                      ),
+                    )
+                  : InkWell(
+                      onTap: () => controller.goBackToChat(),
+                      child: Row(
+                        children: [
+                          10.horizontalSpace,
+                          const Icon(Icons.arrow_back, color: Colors.white),
+                        ],
+                      ),
+                    ),
+            );
+          },
+        ),
+        title: Row(
+          children: [
+            const Text(
+              'Linket.chat!',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 25),
+            ),
+            const Spacer(),
+            InkWell(
+              onTap: () => controller.logout(context),
+              child: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+            )
+          ],
+        ),
+      ),
+      body: Obx(
+        () {
+          if (controller.apiResponse.value == "LOADING") {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (controller.apiResponse.value == "PASS") {
+            return buildMobileContent(constraints: constraints);
+          } else {
+            return const Center(
+              child: Text('Something went wrong. Please try again.'),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -159,7 +230,12 @@ class ChatPage extends StatelessWidget {
           Obx(
             () {
               if (controller.selectedLeftPage.value == "CHAT") {
-                return buildChatList(constraints: constraints);
+                return buildChatList(
+                    constraints: constraints, isMobile: isMobile);
+              }
+              if (controller.selectedLeftPage.value == "CHAT_SCREEN" &&
+                  isMobile) {
+                return buildChatScreenMobile(constraints: constraints);
               }
               if (controller.selectedLeftPage.value == "WALLET") {
                 return buildWalletPage(constraints: constraints);
@@ -170,82 +246,85 @@ class ChatPage extends StatelessWidget {
               return (const SizedBox.shrink());
             },
           ),
-          Positioned(
-            top: constraints.maxHeight - 70,
-            left: 70,
-            right: 70,
-            bottom: 30,
-            child: Obx(
-              () {
-                return Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.grey,
-                      ),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(50))),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () =>
-                              controller.onLeftPageChange(page: "CHAT"),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(50)),
+          if (controller.selectedLeftPage.value != "CHAT_SCREEN") ...{
+            Positioned(
+              left: 70,
+              right: 70,
+              bottom: 30,
+              child: Obx(
+                () {
+                  return Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.grey,
+                        ),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50))),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () =>
+                                controller.onLeftPageChange(page: "CHAT"),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(50)),
+                                  color: controller.selectedLeftPage.value ==
+                                          "CHAT"
+                                      ? const Color.fromARGB(255, 0, 128, 128)
+                                      : Colors.white),
+                              child: Center(
+                                  child: Icon(
+                                Icons.chat,
                                 color:
                                     controller.selectedLeftPage.value == "CHAT"
-                                        ? const Color.fromARGB(255, 0, 128, 128)
-                                        : Colors.white),
-                            child: Center(
-                                child: Icon(
-                              Icons.chat,
-                              color: controller.selectedLeftPage.value == "CHAT"
-                                  ? Colors.white
-                                  : Colors.black,
-                            )),
+                                        ? Colors.white
+                                        : Colors.black,
+                              )),
+                            ),
                           ),
                         ),
-                      ),
-                      // Expanded(
-                      //   child: InkWell(
-                      //     onTap: () =>
-                      //         controller.onLeftPageChange(page: "WALLET"),
-                      //     child: Center(child: Text("Wallet")),
-                      //   ),
-                      // ),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () =>
-                              controller.onLeftPageChange(page: "PROFILE"),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(50)),
+                        // Expanded(
+                        //   child: InkWell(
+                        //     onTap: () =>
+                        //         controller.onLeftPageChange(page: "WALLET"),
+                        //     child: Center(child: Text("Wallet")),
+                        //   ),
+                        // ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () =>
+                                controller.onLeftPageChange(page: "PROFILE"),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(50)),
+                                  color: controller.selectedLeftPage.value ==
+                                          "PROFILE"
+                                      ? const Color.fromARGB(255, 0, 128, 128)
+                                      : Colors.white),
+                              child: Center(
+                                  child: Icon(
+                                Icons.person_outlined,
                                 color: controller.selectedLeftPage.value ==
                                         "PROFILE"
-                                    ? const Color.fromARGB(255, 0, 128, 128)
-                                    : Colors.white),
-                            child: Center(
-                                child: Icon(
-                              Icons.person_outlined,
-                              color:
-                                  controller.selectedLeftPage.value == "PROFILE"
-                                      ? Colors.white
-                                      : Colors.black,
-                            )),
+                                    ? Colors.white
+                                    : Colors.black,
+                              )),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )
+          }
         ],
       ),
     );
@@ -279,7 +358,8 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Widget buildChatList({required BoxConstraints constraints}) {
+  Widget buildChatList(
+      {required BoxConstraints constraints, required bool isMobile}) {
     return Container(
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.only(
@@ -293,7 +373,7 @@ class ChatPage extends StatelessWidget {
         children: controller.chatList.map((chatUser) {
           return Column(
             children: [
-              _buildChatUserTile(chatUser: chatUser),
+              _buildChatUserTile(chatUser: chatUser, isMobile: isMobile),
               // const Divider(),
             ],
           );
@@ -465,7 +545,38 @@ class ChatPage extends StatelessWidget {
             ),
             height: constraints.maxHeight,
             padding:
-                const EdgeInsets.only(top: 20, bottom: 60, left: 20, right: 20),
+                const EdgeInsets.only(top: 60, bottom: 60, left: 20, right: 20),
+            child: ListView.builder(
+              controller: controller.scrollController,
+              shrinkWrap: true,
+              itemCount: messages.length, // Use length of observable list
+              itemBuilder: (context, index) {
+                return chatMessageTile(chat: messages[index], context: context);
+              },
+            ),
+          );
+        }),
+        buildChatingWithTile(),
+        buildInputBox(),
+      ],
+    );
+  }
+
+  Widget buildChatScreenMobile({required BoxConstraints constraints}) {
+    return Stack(
+      children: <Widget>[
+        Obx(() {
+          // Access the observable list directly
+          final messages = controller.chatMessageList;
+
+          return Container(
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(topRight: Radius.circular(50)),
+              color: Colors.white,
+            ),
+            height: constraints.maxHeight,
+            padding:
+                const EdgeInsets.only(top: 60, bottom: 60, left: 20, right: 20),
             child: ListView.builder(
               controller: controller.scrollController,
               shrinkWrap: true,
@@ -521,7 +632,8 @@ class ChatPage extends StatelessWidget {
     );
   }
 
-  Widget _buildChatUserTile({required ChatListUserData chatUser}) {
+  Widget _buildChatUserTile(
+      {required ChatListUserData chatUser, required bool isMobile}) {
     final isHovered = false.obs;
 
     void onHover(bool isHover) {
@@ -547,13 +659,15 @@ class ChatPage extends StatelessWidget {
           onEnter: (_) => onHover(true),
           onExit: (_) => onHover(false),
           child: GestureDetector(
-            onTap: () => controller.onChatTileClicked(chatUser: chatUser),
+            onTap: () => controller.onChatTileClicked(
+                chatUser: chatUser, isMobile: isMobile),
             child: Container(
               color: isHovered.value
                   ? const Color.fromARGB(255, 0, 128, 128).withOpacity(.10)
                   : Colors.transparent,
               child: ListTile(
-                onTap: () => controller.onChatTileClicked(chatUser: chatUser),
+                onTap: () => controller.onChatTileClicked(
+                    chatUser: chatUser, isMobile: isMobile),
                 leading: userImg,
                 title: Text(chatUser.name),
                 subtitle: Text(

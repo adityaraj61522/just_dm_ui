@@ -68,9 +68,13 @@ class ChatPageController extends GetxController {
     return html.window.localStorage[key];
   }
 
-  void onChatTileClicked({required ChatListUserData chatUser}) async {
+  void onChatTileClicked(
+      {required ChatListUserData chatUser, required bool isMobile}) async {
     if (chatUser == selectedChatRoom.value) return; // Compare with .value
     selectedChatRoom.value = chatUser; // Assign with .value
+    if (isMobile) {
+      selectedLeftPage.value = 'CHAT_SCREEN';
+    }
     await connectToServer();
     await fetchChatByRoom();
   }
@@ -381,7 +385,7 @@ class ChatPageController extends GetxController {
       // Show a snackbar to inform the user that the text was copied
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Text copied to clipboard!'),
+          content: Text('Your Link copied to clipboard!'),
           duration: Duration(seconds: 3),
         ),
       );
@@ -496,5 +500,10 @@ class ChatPageController extends GetxController {
     } catch (e) {
       print('Error: $e');
     }
+  }
+
+  goBackToChat() {
+    selectedLeftPage.value = 'CHAT';
+    selectedChatRoom.value = ChatListUserData.fromMap({});
   }
 }
