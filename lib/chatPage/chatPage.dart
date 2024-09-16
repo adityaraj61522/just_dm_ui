@@ -179,7 +179,7 @@ class ChatPage extends StatelessWidget {
   }
 
   Widget buildMobileContent({required BoxConstraints constraints}) {
-    return buildChatTilePage(constraints: constraints, isMobile: true);
+    return buildChatTilePageMobile(constraints: constraints, isMobile: true);
   }
 
   Widget chatScreen({required BoxConstraints constraints}) {
@@ -232,10 +232,6 @@ class ChatPage extends StatelessWidget {
               if (controller.selectedLeftPage.value == "CHAT") {
                 return buildChatList(
                     constraints: constraints, isMobile: isMobile);
-              }
-              if (controller.selectedLeftPage.value == "CHAT_SCREEN" &&
-                  isMobile) {
-                return buildChatScreenMobile(constraints: constraints);
               }
               if (controller.selectedLeftPage.value == "WALLET") {
                 return buildWalletPage(constraints: constraints);
@@ -327,6 +323,111 @@ class ChatPage extends StatelessWidget {
           }
         ],
       ),
+    );
+  }
+
+  Widget buildChatTilePageMobile(
+      {required BoxConstraints constraints, required bool isMobile}) {
+    return Stack(
+      children: [
+        Obx(
+          () {
+            if (controller.selectedLeftPage.value == "CHAT") {
+              return buildChatList(
+                  constraints: constraints, isMobile: isMobile);
+            }
+            if (controller.selectedLeftPage.value == "CHAT_SCREEN" &&
+                isMobile) {
+              return buildChatScreenMobile(constraints: constraints);
+            }
+            if (controller.selectedLeftPage.value == "WALLET") {
+              return buildWalletPage(constraints: constraints);
+            }
+            if (controller.selectedLeftPage.value == "PROFILE") {
+              return buildProfilePage(constraints: constraints);
+            }
+            return (const SizedBox.shrink());
+          },
+        ),
+        if (controller.selectedLeftPage.value != "CHAT_SCREEN") ...{
+          Positioned(
+            left: 70,
+            right: 70,
+            bottom: 30,
+            child: Obx(
+              () {
+                return Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.grey,
+                      ),
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(50))),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () =>
+                              controller.onLeftPageChange(page: "CHAT"),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(50)),
+                                color:
+                                    controller.selectedLeftPage.value == "CHAT"
+                                        ? const Color.fromARGB(255, 0, 128, 128)
+                                        : Colors.white),
+                            child: Center(
+                                child: Icon(
+                              Icons.chat,
+                              color: controller.selectedLeftPage.value == "CHAT"
+                                  ? Colors.white
+                                  : Colors.black,
+                            )),
+                          ),
+                        ),
+                      ),
+                      // Expanded(
+                      //   child: InkWell(
+                      //     onTap: () =>
+                      //         controller.onLeftPageChange(page: "WALLET"),
+                      //     child: Center(child: Text("Wallet")),
+                      //   ),
+                      // ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () =>
+                              controller.onLeftPageChange(page: "PROFILE"),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 5),
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(50)),
+                                color: controller.selectedLeftPage.value ==
+                                        "PROFILE"
+                                    ? const Color.fromARGB(255, 0, 128, 128)
+                                    : Colors.white),
+                            child: Center(
+                                child: Icon(
+                              Icons.person_outlined,
+                              color:
+                                  controller.selectedLeftPage.value == "PROFILE"
+                                      ? Colors.white
+                                      : Colors.black,
+                            )),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          )
+        }
+      ],
     );
   }
 
